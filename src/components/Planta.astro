@@ -7,6 +7,8 @@
 interface Props {
   class?: string;
 }
+import { url } from '../lib/url';
+
 const { class: className = '' } = Astro.props;
 ---
 
@@ -41,8 +43,8 @@ const { class: className = '' } = Astro.props;
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) HL.tour(stage, figure.tour || HL.LAP, () => {});
   };
 </script>
-<script is:inline src="/figures/hairline-kernel.js"></script>
-<script is:inline type="module" src="/figures/predio.js"></script>
+<script is:inline src={url('/figures/hairline-kernel.js')}></script>
+<script is:inline type="module" src={url('/figures/predio.js')}></script>
 
 <style>
   .planta {

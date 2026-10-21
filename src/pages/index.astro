@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Room from '../components/Room.astro';
 import Planta from '../components/Planta.astro';
+import { url } from '../lib/url';
 
 const whatsapp =
   'https://wa.me/5511981660262?text=' +
@@ -66,7 +67,7 @@ const passagem: [number, number] = [0.7, 0.9];
       <a slot="outside" href="#como-trabalhamos" class="abertura abertura--porta">
         Como trabalhamos
       </a>
-      <a slot="outside" href="/obras" class="abertura abertura--janela">
+      <a slot="outside" href={url('/obras')} class="abertura abertura--janela">
         Obras entregues
       </a>
     </Room>
