@@ -40,7 +40,7 @@ const passagem: [number, number] = [0.7, 0.9];
 
 <Base title="Home">
   <!-- PRIMEIRA TELA: a planta -->
-  <section class="hero mx-auto max-w-6xl px-4 pb-20 pt-14 md:px-8 md:pb-28 md:pt-20">
+  <section class="hero mx-auto max-w-6xl px-4 pb-12 pt-14 md:px-8 md:pb-16 md:pt-20">
     <div class="cota cota--top" aria-hidden="true">
       <span class="cota__line"></span>
       <span class="cota__label">+80 obras entregues</span>
@@ -51,7 +51,7 @@ const passagem: [number, number] = [0.7, 0.9];
     </div>
 
     <Room left={[0.39, 0.65]} right={[0.57, 0.82]} stroke={28} strokeMobile={14} radius={52} draw class="hero__room">
-      <div class="grid items-center gap-6 px-8 py-14 md:grid-cols-[1.15fr_1fr] md:px-20 md:py-20 lg:px-24">
+      <div class="grid items-center gap-2 px-8 py-12 md:grid-cols-[1.1fr_1fr] md:gap-6 md:px-16 md:py-10 lg:px-20">
         <div>
         <h1 class="ec-display max-w-[11ch] text-[clamp(2.5rem,7.5vw,5.5rem)]">Planeje antes de quebrar.</h1>
         <p class="mt-6 max-w-[38ch] text-lg md:text-xl">
@@ -60,7 +60,7 @@ const passagem: [number, number] = [0.7, 0.9];
         </p>
         <a href={whatsapp} class="ec-btn ec-btn-destaque mt-10">Quero planejar minha obra</a>
         </div>
-        <Planta class="mx-auto w-full max-w-[600px] md:-mr-6" />
+        <Planta class="planta-hero mx-auto w-full max-w-[560px]" />
       </div>
 
       <a slot="outside" href="#como-trabalhamos" class="abertura abertura--porta">
@@ -74,7 +74,7 @@ const passagem: [number, number] = [0.7, 0.9];
 
   <!-- AFIRMAÇÃO -->
   <section class="bg-verde">
-    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-20 md:grid-cols-[1.4fr_1fr] md:items-end md:px-8 md:py-28">
+    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-[1.4fr_1fr] md:items-end md:px-8 md:py-16">
       <p class="ec-display text-[clamp(2rem,4.6vw,3.5rem)] text-branco">
         Projeto e obra andam juntos.
       </p>
@@ -86,14 +86,14 @@ const passagem: [number, number] = [0.7, 0.9];
   </section>
 
   <!-- AS 3 FASES: três ambientes ligados por portas -->
-  <section id="como-trabalhamos" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 md:px-8 md:py-32">
+  <section id="como-trabalhamos" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 md:px-8 md:py-20">
     <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Três ambientes, uma obra sem surpresa</h2>
     <p class="mt-6 max-w-[56ch] text-lg">
       Cada fase só termina quando você aprova. Você pode contratar só a primeira, as duas primeiras ou o caminho
       inteiro.
     </p>
 
-    <div class="sequencia relative mt-16" data-sequencia>
+    <div class="sequencia relative mt-10" data-sequencia>
       <ol class="grid gap-6 md:grid-cols-3 md:gap-0">
         {fases.map((f, i) => (
           <li class="md:-ml-[14px] md:first:ml-0">
@@ -130,10 +130,10 @@ const passagem: [number, number] = [0.7, 0.9];
 
   <!-- PACOTES -->
   <section class="bg-branco">
-    <div class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
       <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Até onde a gente vai junto</h2>
 
-      <table class="pacotes mt-12 w-full">
+      <table class="pacotes mt-8 w-full">
         <caption class="sr-only">Fases incluídas em cada pacote</caption>
         <thead>
           <tr>
@@ -165,7 +165,7 @@ const passagem: [number, number] = [0.7, 0.9];
   </section>
 
   <!-- OBRAS -->
-  <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
+  <section class="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
     <div class="grid gap-10 md:grid-cols-[1fr_1.3fr] md:items-center">
       <div>
         <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Obras entregues</h2>
@@ -178,14 +178,14 @@ const passagem: [number, number] = [0.7, 0.9];
         >Ver obras no Instagram</a>
       </div>
       <!-- Provisório: substituir pelas fotos reais das obras -->
-      <div class="flex aspect-[4/3] items-center justify-center rounded-lg bg-verde-claro text-floresta">
+      <div class="flex aspect-[16/9] items-center justify-center rounded-lg bg-verde-claro text-floresta">
         Fotos das obras em breve
       </div>
     </div>
   </section>
 
   <!-- FECHAMENTO -->
-  <section class="mx-auto max-w-6xl px-4 pb-24 md:px-8 md:pb-32">
+  <section class="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-20">
     <Room left={[0.3, 0.7]} stroke={14} radius={28}>
       <div class="flex flex-col items-start gap-8 px-8 py-14 md:flex-row md:items-center md:justify-between md:px-16">
         <p class="ec-display text-[clamp(1.75rem,3.6vw,2.5rem)]">Sua obra começa<br />no planejamento.</p>
@@ -198,6 +198,23 @@ const passagem: [number, number] = [0.7, 0.9];
 <style>
   .hero {
     position: relative;
+  }
+
+  /* O desenho do Hairline tem margem própria dentro da caixa 5:4; ampliamos a caixa inteira
+     (palco e svg juntos, para o cursor continuar alinhado) e recolhemos a sobra */
+  .hero :global(.planta-hero .planta__stage) {
+    transform: scale(1.22);
+    transform-origin: 50% 78%;
+  }
+  .hero :global(.planta-hero) {
+    margin-block: -1rem -1rem;
+  }
+  .hero :global(.planta-hero .planta__read) {
+    position: relative;
+    margin-top: .75rem;
+  }
+  @media (min-width: 768px) {
+    .hero :global(.planta-hero) { margin-block: -1rem -2rem; }
   }
 
   /* Cotas: linhas de medida como num desenho técnico */
