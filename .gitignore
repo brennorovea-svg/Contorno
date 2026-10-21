@@ -4,3 +4,11 @@ dist/
 .env
 .env.*
 .DS_Store
+
+# Impeccable
+.impeccable/config.local.json
+.impeccable/review/
+.impeccable/build/
+hairline-*-look.png
+hairline-*-blind.png
+hairline-*-motion.png
