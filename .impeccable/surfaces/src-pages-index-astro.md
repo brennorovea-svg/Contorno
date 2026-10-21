@@ -23,7 +23,7 @@ OWN-WORLD: Gelo paper ground; walls drawn as thick, rounded strokes in Verde Con
 
 STORY: Visitors understand that this studio plans everything before the work starts and keeps the deadline and cost; they believe it because the method is drawn out step by step; they tap through to talk to Malu.
 
-FIRST VIEWPORT: One room occupies about 75% of the viewport width and height, with cotas on the top and left edges. Inside it: the headline "PLANEJE ANTES DE QUEBRAR.", a two-line lead, and the primary CTA (opening WhatsApp) at the lower left. The left opening is the door, linking to "Como trabalhamos"; the right opening is the window, linking to "Obras".
+FIRST VIEWPORT: One room occupies about 75% of the viewport width and height, with cotas on the top and left edges. Inside it: the headline "PLANEJE ANTES DE QUEBRAR.", a two-line lead, and the primary CTA (opening WhatsApp) at the lower left; on the right half, the Hairline figure "Planta que vira obra" (the same room in isometric, whose walls rise where the pointer goes), with its read-out set as a cota label. The left opening is the door, linking to "Como trabalhamos"; the right opening is the window, linking to "Obras".
 
 FORM: Structure B "A planta", position 1 of 7 on my ordered list (dealt index 1). seed:5374ef87c08bf870
 

@@ -1,0 +1,66 @@
+---
+/*
+  Figura "Planta que vira obra", desenhada com o motor do Hairline
+  (lucasmarkes/hairline). O código da figura fica em figures/planta.js
+  (copiado para public/figures/ junto com o kernel, sem alterações).
+*/
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<figure class:list={['planta', className]}>
+  <div
+    class="planta__stage"
+    data-planta
+    role="img"
+    aria-label="Planta de um ambiente com porta e janela; as paredes sobem e viram obra onde você aponta."
+  >
+  </div>
+  <figcaption class="planta__read" aria-hidden="true" data-planta-read>planta</figcaption>
+</figure>
+
+<script is:inline>
+  // Recebe a figura (figures/planta.js chama hairline({...})) e monta no palco da página
+  window.hairline = (figure) => {
+    const stage = document.querySelector('[data-planta]');
+    const label = document.querySelector('[data-planta-read]');
+    if (!stage || !window.HL) return;
+    const HL = window.HL;
+    HL.inject(document);
+    stage.setAttribute('data-hairline', figure.name);
+    const svg = HL.mk('svg', { viewBox: '0 0 400 320', 'aria-hidden': 'true' }, stage);
+    const nomes = { rest: 'obra em andamento', parede: 'parede', janela: 'janela', porta: 'porta', planta: 'planta' };
+    const read = {
+      set textContent(v) { if (label) label.textContent = nomes[v] || v; },
+      get textContent() { return label ? label.textContent : ''; },
+    };
+    read.textContent = 'rest';
+    figure.mount({ stage, svg, read }, figure.range[1]);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) HL.tour(stage, figure.tour || HL.LAP, () => {});
+  };
+</script>
+<script is:inline src="/figures/hairline-kernel.js"></script>
+<script is:inline type="module" src="/figures/planta.js"></script>
+
+<style>
+  .planta {
+    margin: 0;
+    --hairline-plate: var(--color-gelo);
+    --hairline-hi: var(--color-floresta-profundo);
+    --hairline-edge: var(--color-floresta);
+    --hairline-mid: var(--color-verde);
+    --hairline-lo: var(--color-verde-claro);
+    --hairline-stroke: 1.1;
+  }
+  .planta__read {
+    margin-top: .25rem;
+    text-align: center;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--color-floresta);
+  }
+</style>

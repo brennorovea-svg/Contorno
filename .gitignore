@@ -9,3 +9,6 @@ dist/
 .impeccable/config.local.json
 .impeccable/review/
 .impeccable/build/
+hairline-*-look.png
+hairline-*-blind.png
+hairline-*-motion.png
