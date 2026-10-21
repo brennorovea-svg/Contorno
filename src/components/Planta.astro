@@ -1,7 +1,7 @@
 ---
 /*
-  Figura "Planta que vira obra", desenhada com o motor do Hairline
-  (lucasmarkes/hairline). O código da figura fica em figures/planta.js
+  Figura "Prédio", desenhada com o motor do Hairline
+  (lucasmarkes/hairline). O código da figura fica em figures/predio.js
   (copiado para public/figures/ junto com o kernel, sem alterações).
 */
 interface Props {
@@ -15,14 +15,14 @@ const { class: className = '' } = Astro.props;
     class="planta__stage"
     data-planta
     role="img"
-    aria-label="Planta de um ambiente com porta e janela; as paredes sobem e viram obra onde você aponta."
+    aria-label="Prédio de apartamentos; o andar que você aponta se abre e mostra a planta do apartamento."
   >
   </div>
-  <figcaption class="planta__read" aria-hidden="true" data-planta-read>planta</figcaption>
+  <figcaption class="planta__read" aria-hidden="true" data-planta-read>obra em andamento</figcaption>
 </figure>
 
 <script is:inline>
-  // Recebe a figura (figures/planta.js chama hairline({...})) e monta no palco da página
+  // Recebe a figura (figures/predio.js chama hairline({...})) e monta no palco da página
   window.hairline = (figure) => {
     const stage = document.querySelector('[data-planta]');
     const label = document.querySelector('[data-planta-read]');
@@ -31,7 +31,7 @@ const { class: className = '' } = Astro.props;
     HL.inject(document);
     stage.setAttribute('data-hairline', figure.name);
     const svg = HL.mk('svg', { viewBox: '0 0 400 320', 'aria-hidden': 'true' }, stage);
-    const nomes = { rest: 'obra em andamento', parede: 'parede', janela: 'janela', porta: 'porta', planta: 'planta' };
+    const nomes = { rest: 'obra em andamento' };
     const read = {
       set textContent(v) { if (label) label.textContent = nomes[v] || v; },
       get textContent() { return label ? label.textContent : ''; },
@@ -42,7 +42,7 @@ const { class: className = '' } = Astro.props;
   };
 </script>
 <script is:inline src="/figures/hairline-kernel.js"></script>
-<script is:inline type="module" src="/figures/planta.js"></script>
+<script is:inline type="module" src="/figures/predio.js"></script>
 
 <style>
   .planta {
