@@ -1,9 +1,12 @@
-# Publica o site no GitHub Pages a cada push na main.
+# Publica o site no GitHub Pages a cada push na main,
+# e uma vez por dia para trazer os posts novos do Instagram.
 name: Publicar no GitHub Pages
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 9 * * *' # 6h em São Paulo
   workflow_dispatch:
 
 permissions:
@@ -25,10 +28,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # O evento agendado não traz o nome do repositório, então ele sai de GITHUB_REPOSITORY.
+      - run: BASE="/${GITHUB_REPOSITORY#*/}" npm run build
         env:
           SITE: https://${{ github.repository_owner }}.github.io
-          BASE: /${{ github.event.repository.name }}
+          INSTAGRAM_FEED_URL: ${{ vars.INSTAGRAM_FEED_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
