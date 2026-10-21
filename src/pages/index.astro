@@ -1,131 +1,363 @@
 ---
 import Base from '../layouts/Base.astro';
-import Simbolo from '../components/Simbolo.astro';
+import Room from '../components/Room.astro';
+
+const whatsapp =
+  'https://wa.me/5511981660262?text=' +
+  encodeURIComponent('Oi, Malu! Vou reformar e quero planejar minha obra.');
 
 const fases = [
   {
     nome: 'Conceitual',
-    cor: 'bg-terra-claro',
+    cor: 'var(--color-terra-claro)',
     itens: ['Briefing', 'Conceito', 'Projeto preliminar'],
     texto: 'Entendemos como você vive e o que a obra precisa resolver. Você vê o espaço antes de gastar com ele.',
   },
   {
     nome: 'Executivo',
-    cor: 'bg-terra-medio',
+    cor: 'var(--color-terra-medio)',
     itens: ['Projeto executivo', 'Memorial descritivo', 'Fluxo financeiro'],
     texto: 'Cada detalhe desenhado e cada custo previsto. A obra só começa com todos os orçamentos aprovados.',
   },
   {
     nome: 'Gestão',
-    cor: 'bg-terra',
+    cor: 'var(--color-terra)',
     itens: ['Gerenciamento da obra', 'Compras', 'Produção'],
     texto: 'Acompanhamos a execução de perto. Você acompanha tudo, como se estivesse na obra.',
   },
 ];
 
-// Provisório: substituir por obras reais (bairro, tipo, metragem, prazo) quando as fotos chegarem
-const obras = [
-  { tipo: 'Apartamento', bairro: 'Bairro', area: '— m²' },
-  { tipo: 'Restaurante', bairro: 'Bairro', area: '— m²' },
-  { tipo: 'Cozinha', bairro: 'Bairro', area: '— m²' },
+const pacotes = [
+  { nome: 'Pacote 1', fases: 1, para: 'Para quem quer o projeto e toca a obra por conta própria.' },
+  { nome: 'Pacote 2', fases: 2, para: 'Projeto completo, com cada custo previsto antes de começar.' },
+  { nome: 'Pacote 3', fases: 3, para: 'Do conceito à entrega, com a obra acompanhada de perto.' },
 ];
+
+// Mesma posição das aberturas em todos os ambientes da sequência, para o percurso atravessar
+const passagem: [number, number] = [0.7, 0.9];
 ---
 
 <Base title="Home">
-  <!-- HERO -->
-  <section class="relative overflow-hidden bg-verde">
-    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-16 md:grid-cols-[1.2fr_1fr] md:px-8 md:pb-28 md:pt-24">
-      <div>
-        <p class="ec-label !text-floresta-profundo">+80 obras entregues em São Paulo</p>
-        <h1 class="ec-display mt-6 text-[40px] text-branco md:text-[64px]">
-          Vai reformar?<br />Planeje antes de quebrar.
-        </h1>
-        <p class="mt-6 max-w-lg text-lg text-floresta-profundo md:text-xl">
-          Arquitetura de qualidade ao menor custo possível. Planejamos cada etapa antes de a obra
-          começar e acompanhamos de perto, para entregar no prazo e no custo previstos.
+  <!-- PRIMEIRA TELA: a planta -->
+  <section class="hero mx-auto max-w-6xl px-4 pb-20 pt-14 md:px-8 md:pb-28 md:pt-20">
+    <div class="cota cota--top" aria-hidden="true">
+      <span class="cota__line"></span>
+      <span class="cota__label">+80 obras entregues</span>
+    </div>
+    <div class="cota cota--left" aria-hidden="true">
+      <span class="cota__line"></span>
+      <span class="cota__label">desde 2021</span>
+    </div>
+
+    <Room left={[0.39, 0.65]} right={[0.57, 0.82]} stroke={28} strokeMobile={14} radius={52} draw class="hero__room">
+      <div class="px-8 py-14 md:px-24 md:py-24">
+        <h1 class="ec-display max-w-[11ch] text-[clamp(2.5rem,7.5vw,5.5rem)]">Planeje antes de quebrar.</h1>
+        <p class="mt-6 max-w-[38ch] text-lg md:text-xl">
+          A obra só começa com todos os orçamentos aprovados. Quem desenha o projeto acompanha a execução, para entregar
+          no prazo e no custo previstos.
         </p>
-        <div class="mt-10 flex flex-wrap gap-4">
-          <a href="/contato" class="ec-btn ec-btn-destaque">Quero planejar minha obra</a>
-          <a href="/como-trabalhamos" class="ec-btn ec-btn-secundario text-floresta-profundo">Como funciona</a>
-        </div>
+        <a href={whatsapp} class="ec-btn ec-btn-destaque mt-10">Quero planejar minha obra</a>
       </div>
 
-      <div class="flex justify-center md:justify-end">
-        <Simbolo size="100%" animate class="max-w-[220px] text-branco md:max-w-[360px]" />
-      </div>
-    </div>
+      <a slot="outside" href="#como-trabalhamos" class="abertura abertura--porta">
+        Como trabalhamos
+      </a>
+      <a slot="outside" href="/obras" class="abertura abertura--janela">
+        Obras entregues
+      </a>
+    </Room>
   </section>
 
-  <!-- PROPOSTA DE VALOR -->
-  <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
-    <div class="grid gap-12 md:grid-cols-2" data-reveal="stagger">
-      <h2 class="ec-display ec-filete text-[28px] md:text-[40px]">Projeto e obra andam juntos</h2>
-      <p class="text-lg md:text-xl">
-        A maioria das reformas estoura prazo e orçamento porque começa sem planejamento. Aqui é ao
-        contrário: a obra só começa com todos os orçamentos aprovados, e quem desenhou o projeto é quem
-        acompanha a execução.
+  <!-- AFIRMAÇÃO -->
+  <section class="bg-verde">
+    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-20 md:grid-cols-[1.4fr_1fr] md:items-end md:px-8 md:py-28">
+      <p class="ec-display text-[clamp(2rem,4.6vw,3.5rem)] text-branco">
+        Projeto e obra andam juntos.
+      </p>
+      <p class="max-w-[42ch] text-lg">
+        A maioria das reformas estoura prazo e orçamento porque começa sem planejamento. Aqui é ao contrário: quem
+        desenhou cada detalhe é quem está na obra, todos os dias que ela precisa.
       </p>
     </div>
   </section>
 
-  <!-- 3 FASES -->
-  <section class="bg-branco py-24 md:py-32">
-    <div class="mx-auto max-w-6xl px-4 md:px-8">
-      <p class="ec-label">Como trabalhamos</p>
-      <h2 class="ec-display ec-filete mt-4 text-[28px] md:text-[40px]">Três fases, nenhuma surpresa</h2>
+  <!-- AS 3 FASES: três ambientes ligados por portas -->
+  <section id="como-trabalhamos" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-24 md:px-8 md:py-32">
+    <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Três ambientes, uma obra sem surpresa</h2>
+    <p class="mt-6 max-w-[56ch] text-lg">
+      Cada fase só termina quando você aprova. Você pode contratar só a primeira, as duas primeiras ou o caminho
+      inteiro.
+    </p>
 
-      <div class="relative mt-16">
-        <div class="absolute left-0 right-0 top-[7px] hidden h-1 rounded-full bg-verde-zebra md:block">
-          <div data-fases-barra class="h-full origin-left rounded-full bg-terra"></div>
-        </div>
+    <div class="sequencia relative mt-16" data-sequencia>
+      <ol class="grid gap-6 md:grid-cols-3 md:gap-0">
+        {fases.map((f, i) => (
+          <li class="md:-ml-[14px] md:first:ml-0">
+            <Room
+              left={i > 0 ? passagem : undefined}
+              right={i < fases.length - 1 ? passagem : undefined}
+              stroke={14}
+              radius={28}
+              color={f.cor}
+              class="h-full"
+            >
+              <div class="flex h-full flex-col px-8 pb-24 pt-10">
+                <p class="cota-texto">{i + 1}ª fase</p>
+                <h3 class="mt-2 text-[1.75rem] font-bold leading-tight">{f.nome}</h3>
+                <p class="mt-4">{f.texto}</p>
+                <ul class="mt-6 space-y-1 text-[15px]">
+                  {f.itens.map((item) => (
+                    <li class="flex items-center gap-3">
+                      <span class="h-[3px] w-4 rounded-full" style={`background:${f.cor}`}></span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Room>
+          </li>
+        ))}
+      </ol>
+      <svg class="percurso" data-percurso preserveAspectRatio="none" viewBox="0 0 100 10" aria-hidden="true">
+        <line x1="2" y1="5" x2="98" y2="5" vector-effect="non-scaling-stroke" />
+      </svg>
+    </div>
+  </section>
 
-        <ol class="grid gap-10 md:grid-cols-3" data-reveal="stagger">
-          {fases.map((f, i) => (
-            <li class="relative">
-              <span class:list={['block h-[18px] w-[18px] rounded-full ring-4 ring-branco', f.cor]}></span>
-              <p class="ec-label mt-6">Fase {i + 1}</p>
-              <h3 class="mt-2 text-2xl font-bold">{f.nome}</h3>
-              <p class="mt-3">{f.texto}</p>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {f.itens.map((item) => (
-                  <li class:list={['rounded-sm px-3 py-1 text-sm', f.cor]}>{item}</li>
-                ))}
-              </ul>
-            </li>
+  <!-- PACOTES -->
+  <section class="bg-branco">
+    <div class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
+      <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Até onde a gente vai junto</h2>
+
+      <table class="pacotes mt-12 w-full">
+        <caption class="sr-only">Fases incluídas em cada pacote</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="sr-only">Pacote</th>
+            {fases.map((f) => <th scope="col">{f.nome}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {pacotes.map((p) => (
+            <tr>
+              <th scope="row">
+                <span class="block text-xl font-bold">{p.nome}</span>
+                <span class="block text-[15px] font-normal">{p.para}</span>
+              </th>
+              {fases.map((f, i) => (
+                <td>
+                  {i < p.fases ? (
+                    <span class="faixa" style={`background:${f.cor}`}><span class="sr-only">incluída</span></span>
+                  ) : (
+                    <span class="faixa faixa--vazia"><span class="sr-only">não incluída</span></span>
+                  )}
+                </td>
+              ))}
+            </tr>
           ))}
-        </ol>
-      </div>
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <!-- OBRAS EM DESTAQUE -->
+  <!-- OBRAS -->
   <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
-    <div class="flex flex-wrap items-end justify-between gap-6">
+    <div class="grid gap-10 md:grid-cols-[1fr_1.3fr] md:items-center">
       <div>
-        <p class="ec-label">Obras entregues</p>
-        <h2 class="ec-display ec-filete mt-4 text-[28px] md:text-[40px]">No prazo e no custo</h2>
+        <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Obras entregues</h2>
+        <p class="mt-6 max-w-[40ch] text-lg">
+          Mais de 80 obras em São Paulo, cada uma no prazo e no custo combinados. A galeria completa chega aqui em breve.
+        </p>
+        <a
+          href="https://www.instagram.com/estudiocontorno/"
+          class="mt-8 inline-block font-semibold underline decoration-terra decoration-2 underline-offset-[6px] hover:text-floresta"
+        >Ver obras no Instagram</a>
       </div>
-      <a href="/obras" class="font-semibold underline decoration-terra decoration-2 underline-offset-4">Ver obras entregues</a>
+      <!-- Provisório: substituir pelas fotos reais das obras -->
+      <div class="flex aspect-[4/3] items-center justify-center rounded-lg bg-verde-claro text-floresta">
+        Fotos das obras em breve
+      </div>
     </div>
-
-    <ul class="mt-12 grid gap-6 md:grid-cols-3" data-reveal="stagger">
-      {obras.map((o) => (
-        <li class="group">
-          <div class="flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md bg-verde-claro text-sm text-floresta transition-transform duration-500 group-hover:scale-[1.02]">
-            Foto da obra em breve
-          </div>
-          <p class="mt-4 font-semibold">{o.tipo}</p>
-          <p class="text-[15px] text-floresta">{o.bairro} · {o.area}</p>
-        </li>
-      ))}
-    </ul>
   </section>
 
-  <!-- CHAMADA FINAL -->
-  <section class="bg-verde-claro">
-    <div class="mx-auto flex max-w-6xl flex-col items-start gap-8 px-4 py-20 md:flex-row md:items-center md:justify-between md:px-8" data-reveal>
-      <h2 class="ec-display text-[28px] md:text-[40px]">Sua obra começa<br />no planejamento.</h2>
-      <a href="https://wa.me/5511981660262" class="ec-btn ec-btn-primario">Fale com a Malu</a>
-    </div>
+  <!-- FECHAMENTO -->
+  <section class="mx-auto max-w-6xl px-4 pb-24 md:px-8 md:pb-32">
+    <Room left={[0.3, 0.7]} stroke={14} radius={28}>
+      <div class="flex flex-col items-start gap-8 px-8 py-14 md:flex-row md:items-center md:justify-between md:px-16">
+        <p class="ec-display text-[clamp(1.75rem,3.6vw,2.5rem)]">Sua obra começa<br />no planejamento.</p>
+        <a href={whatsapp} class="ec-btn ec-btn-primario">Fale com a Malu</a>
+      </div>
+    </Room>
   </section>
 </Base>
+
+<style>
+  .hero {
+    position: relative;
+  }
+
+  /* Cotas: linhas de medida como num desenho técnico */
+  .cota {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-floresta);
+    opacity: 0;
+    animation: cota-in .8s ease-out 1.3s forwards;
+  }
+  .cota__line {
+    position: absolute;
+    background: currentColor;
+  }
+  .cota__line::before,
+  .cota__line::after {
+    content: "";
+    position: absolute;
+    background: currentColor;
+  }
+  .cota__label {
+    position: relative;
+    padding: 0 12px;
+    background: var(--color-gelo);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+
+  .cota--top {
+    left: 1rem;
+    right: 1rem;
+    top: 1.25rem;
+    height: 1.5rem;
+  }
+  .cota--top .cota__line { left: 0; right: 0; top: 50%; height: 1px; }
+  .cota--top .cota__line::before,
+  .cota--top .cota__line::after { top: -6px; width: 1px; height: 13px; }
+  .cota--top .cota__line::before { left: 0; }
+  .cota--top .cota__line::after { right: 0; }
+
+  .cota--left { display: none; }
+
+  @media (min-width: 768px) {
+    .cota--top { left: 2rem; right: 2rem; top: 2.5rem; }
+    .cota--left {
+      display: flex;
+      left: -.75rem;
+      top: 5rem;
+      bottom: 7rem;
+      width: 1.5rem;
+    }
+    .cota--left .cota__line { top: 0; bottom: 0; left: 50%; width: 1px; }
+    .cota--left .cota__line::before,
+    .cota--left .cota__line::after { left: -6px; height: 1px; width: 13px; }
+    .cota--left .cota__line::before { top: 0; }
+    .cota--left .cota__line::after { bottom: 0; }
+    .cota--left .cota__label { writing-mode: vertical-rl; transform: rotate(180deg); padding: 12px 0; }
+  }
+
+  @keyframes cota-in { to { opacity: 1; } }
+
+  /* Porta e janela: as aberturas da planta são links */
+  .abertura {
+    position: absolute;
+    z-index: 1;
+    writing-mode: vertical-rl;
+    padding: 4px;
+    font-weight: 600;
+    font-size: .75rem;
+    letter-spacing: .04em;
+    color: var(--color-floresta-profundo);
+    transition: color .2s;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .abertura { font-size: .875rem; }
+  }
+  .abertura:hover { color: var(--color-terra-destaque); }
+  .abertura--porta {
+    left: 0;
+    top: 52%;
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+  .abertura--janela {
+    right: 0;
+    top: 69.5%;
+    transform: translate(50%, -50%);
+  }
+
+
+  /* Percurso: linha tracejada que atravessa as portas das 3 fases */
+  .percurso {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .percurso {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 80%;
+      width: 100%;
+      height: 20px;
+      transform: translateY(-50%);
+      overflow: visible;
+      stroke: var(--color-floresta);
+      stroke-width: 2;
+      stroke-dasharray: 2 10;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+  }
+
+  .cota-texto {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--color-floresta);
+  }
+
+  /* Pacotes */
+  .pacotes {
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+  .pacotes thead th {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--color-floresta);
+    text-align: left;
+    padding: 0 6px 4px;
+  }
+  .pacotes tbody th {
+    text-align: left;
+    padding: 12px 24px 12px 0;
+    width: 40%;
+    vertical-align: middle;
+  }
+  .pacotes td {
+    padding: 0 3px;
+    vertical-align: middle;
+  }
+  .faixa {
+    display: block;
+    height: 44px;
+    border-radius: 10px;
+  }
+  .faixa--vazia {
+    border: 2px dashed var(--color-borda);
+  }
+
+  @media (max-width: 767px) {
+    .pacotes, .pacotes tbody, .pacotes tr { display: block; }
+    .pacotes thead { display: none; }
+    .pacotes tr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 24px; }
+    .pacotes tbody th { grid-column: 1 / -1; width: auto; padding: 0 0 4px; }
+    .pacotes td { padding: 0; }
+    .faixa { height: 28px; }
+  }
+</style>

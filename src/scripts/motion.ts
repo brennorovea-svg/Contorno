@@ -1,4 +1,5 @@
-// Movimento do site: scroll suave (Lenis) + revelações ao rolar (GSAP ScrollTrigger).
+// Movimento do site: scroll suave (Lenis) + o percurso entre as fases (GSAP ScrollTrigger).
+// As paredes da primeira tela se desenham só com CSS (Room.astro).
 // Quem prefere menos movimento (configuração do sistema) recebe a página estática.
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
@@ -9,35 +10,21 @@ const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 if (!reduzMovimento) {
   gsap.registerPlugin(ScrollTrigger);
 
-  const lenis = new Lenis({ lerp: 0.1 });
+  const lenis = new Lenis({ lerp: 0.1, anchors: { offset: -96 } });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  // Qualquer elemento com data-reveal sobe e aparece ao entrar na tela.
-  // data-reveal="stagger" anima os filhos um depois do outro.
-  gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
-    const alvos = el.dataset.reveal === 'stagger' ? el.children : el;
-    gsap.from(alvos, {
-      y: 40,
-      opacity: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      stagger: 0.12,
-      scrollTrigger: { trigger: el, start: 'top 85%' },
-    });
-  });
-
-  // Linha do tempo das fases: a barra terracota cresce conforme você rola.
-  const barra = document.querySelector<HTMLElement>('[data-fases-barra]');
-  if (barra) {
+  // O percurso tracejado atravessa as portas das 3 fases conforme você rola
+  const percurso = document.querySelector<SVGElement>('[data-percurso]');
+  if (percurso) {
     gsap.fromTo(
-      barra,
-      { scaleX: 0 },
+      percurso,
+      { clipPath: 'inset(0 100% 0 0)' },
       {
-        scaleX: 1,
+        clipPath: 'inset(0 0% 0 0)',
         ease: 'none',
-        scrollTrigger: { trigger: barra.parentElement, start: 'top 75%', end: 'bottom 45%', scrub: true },
+        scrollTrigger: { trigger: '[data-sequencia]', start: 'top 70%', end: 'bottom 60%', scrub: 0.6 },
       },
     );
   }

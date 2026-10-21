@@ -58,6 +58,20 @@
     body { font-size: 1.125rem; }
   }
 
+  ::selection {
+    background: var(--color-verde-claro);
+    color: var(--color-floresta-profundo);
+  }
+
+  html {
+    caret-color: var(--color-terra-destaque);
+    scrollbar-color: var(--color-verde) var(--color-gelo);
+  }
+
+  a {
+    text-underline-offset: .25em;
+  }
+
   :focus-visible {
     outline: 3px solid var(--color-terra-destaque);
     outline-offset: 2px;

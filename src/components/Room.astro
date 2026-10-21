@@ -1,0 +1,152 @@
+---
+/*
+  Um ambiente em planta: paredes grossas de cantos arredondados, com aberturas
+  (porta, janela) nas laterais. O desenho é recalculado no navegador para
+  acompanhar o tamanho real do conteúdo, mantendo o traço e o raio fixos.
+
+  openings: frações da altura, ex.: { left: [0.39, 0.65], right: [0.57, 0.82] }
+  (as do símbolo da marca, manual seção 3.4).
+*/
+interface Props {
+  left?: [number, number];
+  right?: [number, number];
+  stroke?: number;
+  strokeMobile?: number;
+  radius?: number;
+  color?: string;
+  draw?: boolean;
+  class?: string;
+}
+
+const {
+  left,
+  right,
+  stroke = 28,
+  strokeMobile,
+  radius = 48,
+  color = 'var(--color-verde)',
+  draw = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={['room', { 'room--draw': draw }, className]}
+  data-room
+  data-left={left?.join(',')}
+  data-right={right?.join(',')}
+  data-stroke={stroke}
+  data-stroke-mobile={strokeMobile ?? stroke}
+  data-radius={radius}
+  style={`--room-color:${color}`}
+>
+  <svg class="room__walls" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"></svg>
+  <div class="room__inside">
+    <slot />
+  </div>
+  <slot name="outside" />
+</div>
+
+<style>
+  .room {
+    position: relative;
+  }
+
+  .room__walls {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    stroke: var(--room-color);
+    pointer-events: none;
+  }
+
+  .room__inside {
+    position: relative;
+  }
+
+  /* As paredes se desenham: cada trecho começa vazio e vai sendo preenchido */
+  .room--draw :global(path) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: room-draw 1.4s cubic-bezier(.16, 1, .3, 1) .15s forwards;
+  }
+  .room--draw :global(path + path) {
+    animation-delay: .55s;
+  }
+
+  @keyframes room-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .room--draw :global(path) {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
+
+<script>
+  type Gap = [number, number] | null;
+
+  function parseGap(v?: string): Gap {
+    if (!v) return null;
+    const [a, b] = v.split(',').map(Number);
+    return [a, b];
+  }
+
+  // Monta os trechos de parede ao redor do retângulo, pulando as aberturas
+  function wallPaths(w: number, h: number, s: number, r: number, L: Gap, R: Gap): string[] {
+    const i = s / 2;
+    const x0 = i, x1 = w - i, y0 = i, y1 = h - i;
+    const yAt = (f: number) => y0 + f * (y1 - y0);
+    const arc = (x: number, y: number) => `A${r} ${r} 0 0 1 ${x} ${y}`;
+
+    const topRun = `V${y0 + r} ${arc(x0 + r, y0)} H${x1 - r} ${arc(x1, y0 + r)}`;
+    const bottomRun = `V${y1 - r} ${arc(x1 - r, y1)} H${x0 + r} ${arc(x0, y1 - r)}`;
+
+    if (L && R) {
+      return [
+        `M${x0} ${yAt(L[0])} ${topRun} V${yAt(R[0])}`,
+        `M${x1} ${yAt(R[1])} ${bottomRun} V${yAt(L[1])}`,
+      ];
+    }
+    if (L) {
+      return [`M${x0} ${yAt(L[0])} ${topRun} V${y1 - r} ${arc(x1 - r, y1)} H${x0 + r} ${arc(x0, y1 - r)} V${yAt(L[1])}`];
+    }
+    if (R) {
+      return [`M${x1} ${yAt(R[1])} ${bottomRun} V${y0 + r} ${arc(x0 + r, y0)} H${x1 - r} ${arc(x1, y0 + r)} V${yAt(R[0])}`];
+    }
+    return [`M${x0} ${y0 + r} ${arc(x0 + r, y0)} H${x1 - r} ${arc(x1, y0 + r)} ${bottomRun} Z`];
+  }
+
+  const mobile = window.matchMedia('(max-width: 767px)');
+
+  function render(room: HTMLElement) {
+    const svg = room.querySelector<SVGSVGElement>('.room__walls');
+    if (!svg) return;
+    const { width: w, height: h } = room.getBoundingClientRect();
+    if (!w || !h) return;
+    const s = Number(mobile.matches ? room.dataset.strokeMobile : room.dataset.stroke);
+    const r = Math.min(Number(room.dataset.radius), w / 4, h / 4);
+    const paths = wallPaths(w, h, s, r, parseGap(room.dataset.left), parseGap(room.dataset.right));
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('stroke-width', String(s));
+    const existing = svg.querySelectorAll('path');
+    paths.forEach((d, k) => {
+      const p = existing[k] ?? svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+      p.setAttribute('d', d);
+      p.setAttribute('pathLength', '1');
+    });
+  }
+
+  const rooms = document.querySelectorAll<HTMLElement>('[data-room]');
+  const ro = new ResizeObserver((entries) => entries.forEach((e) => render(e.target as HTMLElement)));
+  rooms.forEach((room) => {
+    render(room);
+    ro.observe(room);
+  });
+</script>
