@@ -1,0 +1,32 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:#F8F8F8;font-family:Heebo,sans-serif;color:#384744;position:relative}
+nav{position:absolute;top:0;left:0;right:0;height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;font-size:15px;font-weight:500;z-index:3}
+nav ul{display:flex;gap:36px;list-style:none;padding:0}
+.photo{position:absolute;left:24px;right:24px;top:84px;height:560px;border-radius:16px;overflow:hidden;display:flex}
+.half{flex:1;display:flex;align-items:center;justify-content:center;font-size:14px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.antes{background:repeating-linear-gradient(45deg,#d9dedb 0 14px,#cfd5d2 14px 28px);color:#50625E}
+.depois{background:#C7DFD5;color:#384744}
+.tag{position:absolute;top:24px;background:#fff;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;letter-spacing:.2em}
+.handle{position:absolute;left:50%;top:0;bottom:0;width:4px;background:#fff;transform:translateX(-50%)}
+.knob{position:absolute;left:50%;top:50%;width:64px;height:64px;border-radius:50%;background:#50625E;color:#F8F8F8;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(40,50,40,.2)}
+.band{position:absolute;left:24px;right:24px;bottom:24px;height:212px;background:#8FBEAB;border-radius:16px;display:flex;align-items:center;justify-content:space-between;padding:0 56px}
+h1{font-family:Montserrat;font-weight:900;text-transform:uppercase;font-size:60px;line-height:1.02;color:#fff}
+.side{text-align:right}
+.meta{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px}
+.cta{display:inline-block;background:#CB603F;color:#F8F8F8;font-weight:700;font-size:19px;padding:18px 32px;border-radius:6px}
+</style></head><body>
+<nav><svg width="40" height="40" viewBox="-4 -4 108 108" fill="none" stroke="#50625E" stroke-width="7" stroke-linecap="round"><path d="M2.5 39V10.5a8 8 0 0 1 8-8h79a8 8 0 0 1 8 8V57M97.5 82v7.5a8 8 0 0 1-8 8h-79a8 8 0 0 1-8-8V65"/></svg>
+<ul><li>Como trabalhamos</li><li>Obras</li><li>Quem sou eu</li><li>Contato</li></ul></nav>
+<div class="photo">
+<div class="half antes">Foto antes (exemplo)</div><div class="half depois">Foto depois (exemplo)</div>
+<span class="tag" style="left:24px">ANTES</span><span class="tag" style="right:24px">DEPOIS</span>
+<div class="handle"></div><div class="knob">↔</div>
+</div>
+<div class="band">
+<h1>Mesmo espaço.<br>Planejado antes.</h1>
+<div class="side"><p class="meta">Apartamento · Bairro · 00 m² · no prazo (exemplo)</p><span class="cta">Quero planejar minha obra</span></div>
+</div>
+</body></html>
