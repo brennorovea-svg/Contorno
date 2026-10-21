@@ -1,11 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import Instagram from '../components/Instagram.astro';
 ---
 
-<Base title="Obras">
-  <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
-    <p class="ec-label">Em construção</p>
-    <h1 class="ec-display ec-filete mt-4 text-[36px] md:text-[56px]">Obras</h1>
-    <p class="mt-6 max-w-lg text-lg">Esta página entra na etapa 3 do projeto.</p>
+<Base title="Obras" description="Obras recentes do Estúdio Contorno em São Paulo, direto do nosso Instagram.">
+  <section class="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
+    <h1 class="ec-display ec-filete text-[36px] md:text-[56px]">Obras</h1>
+    <p class="mt-6 max-w-[48ch] text-lg">
+      Mais de 80 obras entregues em São Paulo. Acompanhe as mais recentes, direto do nosso Instagram.
+    </p>
+    <Instagram class="mt-10" />
   </section>
 </Base>

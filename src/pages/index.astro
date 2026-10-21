@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Room from '../components/Room.astro';
 import Planta from '../components/Planta.astro';
+import Instagram from '../components/Instagram.astro';
 import { url } from '../lib/url';
 
 const whatsapp =
@@ -171,17 +172,10 @@ const passagem: [number, number] = [0.7, 0.9];
       <div>
         <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Obras entregues</h2>
         <p class="mt-6 max-w-[40ch] text-lg">
-          Mais de 80 obras em São Paulo, cada uma no prazo e no custo combinados. A galeria completa chega aqui em breve.
+          Mais de 80 obras em São Paulo, cada uma no prazo e no custo combinados. Acompanhe as mais recentes.
         </p>
-        <a
-          href="https://www.instagram.com/estudiocontorno/"
-          class="mt-8 inline-block font-semibold underline decoration-terra decoration-2 underline-offset-[6px] hover:text-floresta"
-        >Ver obras no Instagram</a>
       </div>
-      <!-- Provisório: substituir pelas fotos reais das obras -->
-      <div class="flex aspect-[16/9] items-center justify-center rounded-lg bg-verde-claro text-floresta">
-        Fotos das obras em breve
-      </div>
+      <Instagram tamanho="estreito" class="min-w-0" />
     </div>
   </section>
 

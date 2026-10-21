@@ -1,0 +1,156 @@
+---
+/*
+  Carrossel com os últimos posts do Instagram do estúdio.
+  Os posts vêm de src/lib/instagram.ts, no build. Sem feed configurado,
+  mostra um convite para abrir o perfil.
+*/
+import { postsDoInstagram } from '../lib/instagram';
+
+interface Props {
+  class?: string;
+  /** Largura de cada card: "estreito" para colunas, "largo" para a página inteira. */
+  tamanho?: 'estreito' | 'largo';
+}
+const { class: className = '', tamanho = 'largo' } = Astro.props;
+
+const perfil = 'https://www.instagram.com/estudiocontorno/';
+const posts = await postsDoInstagram();
+const data = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+{posts.length > 0 ? (
+  <div class:list={['insta', `insta--${tamanho}`, className]} data-insta>
+    <ul class="insta__trilho" data-insta-trilho aria-label="Posts recentes do Instagram">
+      {posts.map((p) => (
+        <li class="insta__card">
+          <a href={p.link} class="group block" target="_blank" rel="noopener">
+            <div class="insta__foto">
+              <img
+                src={p.imagem}
+                width={p.largura}
+                height={p.altura}
+                alt={p.alt}
+                loading="lazy"
+                decoding="async"
+                class="transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+              {(p.album || p.video) && (
+                <span class="insta__tipo">{p.video ? 'vídeo' : 'álbum'}</span>
+              )}
+            </div>
+            {p.legenda && <p class="insta__legenda">{p.legenda}</p>}
+            <time class="ec-label mt-2 block" datetime={p.data.toISOString()}>{data.format(p.data)}</time>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-6 flex items-center justify-between gap-4">
+      <a
+        href={perfil}
+        class="font-semibold underline decoration-terra decoration-2 underline-offset-[6px] hover:text-floresta"
+        target="_blank"
+        rel="noopener"
+      >Ver tudo no Instagram</a>
+      <div class="hidden gap-2 md:flex">
+        <button type="button" class="insta__seta" data-insta-seta="-1" aria-label="Posts anteriores">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <button type="button" class="insta__seta" data-insta-seta="1" aria-label="Próximos posts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+) : (
+  <a
+    href={perfil}
+    class:list={['flex aspect-[16/9] flex-col items-center justify-center gap-2 rounded-lg bg-verde-claro text-floresta hover:bg-verde-claro-2', className]}
+    target="_blank"
+    rel="noopener"
+  >
+    <span class="ec-label">@estudiocontorno</span>
+    <span class="font-semibold">Veja as obras no Instagram</span>
+  </a>
+)}
+
+<script>
+  // As setas andam um card por vez; o arraste e o toque são do próprio scroll-snap.
+  document.querySelectorAll<HTMLElement>('[data-insta]').forEach((raiz) => {
+    const trilho = raiz.querySelector<HTMLElement>('[data-insta-trilho]')!;
+    const setas = raiz.querySelectorAll<HTMLButtonElement>('[data-insta-seta]');
+    const atualizar = () => {
+      const fim = trilho.scrollWidth - trilho.clientWidth - 2;
+      setas[0].disabled = trilho.scrollLeft <= 2;
+      setas[1].disabled = trilho.scrollLeft >= fim;
+    };
+    setas.forEach((seta) =>
+      seta.addEventListener('click', () => {
+        const card = trilho.querySelector<HTMLElement>('.insta__card');
+        const passo = card ? card.offsetWidth + parseFloat(getComputedStyle(trilho).columnGap || '0') : trilho.clientWidth;
+        trilho.scrollBy({ left: passo * Number(seta.dataset.instaSeta), behavior: 'smooth' });
+      }),
+    );
+    trilho.addEventListener('scroll', atualizar, { passive: true });
+    atualizar();
+  });
+</script>
+
+<style>
+  .insta__trilho {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .insta__trilho::-webkit-scrollbar { display: none; }
+  .insta--largo .insta__trilho { grid-auto-columns: min(78%, 22rem); }
+  .insta--estreito .insta__trilho { grid-auto-columns: min(78%, 17rem); }
+  @media (min-width: 768px) {
+    .insta__trilho { column-gap: 1.5rem; }
+    .insta--largo .insta__trilho { grid-auto-columns: calc((100% - 3rem) / 3); }
+  }
+  .insta__card { scroll-snap-align: start; }
+  .insta__foto {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--color-verde-claro);
+  }
+  .insta__foto img { width: 100%; height: 100%; object-fit: cover; }
+  .insta__tipo {
+    position: absolute;
+    top: .75rem;
+    right: .75rem;
+    padding: .25rem .6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-gelo) 88%, transparent);
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--color-floresta-profundo);
+  }
+  .insta__legenda {
+    margin-top: .875rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .insta__seta {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--color-floresta);
+    border-radius: 999px;
+    color: var(--color-floresta);
+    transition: background-color .2s, color .2s, opacity .2s;
+  }
+  .insta__seta:hover:not(:disabled) { background: var(--color-floresta); color: var(--color-gelo); }
+  .insta__seta:disabled { opacity: .3; cursor: default; }
+</style>
