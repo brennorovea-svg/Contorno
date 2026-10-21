@@ -1,0 +1,49 @@
+---
+import Simbolo from './Simbolo.astro';
+
+const links = [
+  { href: '/como-trabalhamos', label: 'Como trabalhamos' },
+  { href: '/obras', label: 'Obras' },
+  { href: '/quem-sou-eu', label: 'Quem sou eu' },
+  { href: '/contato', label: 'Contato' },
+];
+
+const atual = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<header class="sticky top-0 z-40 bg-gelo/85 backdrop-blur border-b border-borda">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
+    <!-- Provisório: trocar pelo SVG oficial contorno_horizontal_floresta.svg quando a pasta logos/ chegar -->
+    <a href="/" class="text-floresta" aria-label="Estúdio Contorno, página inicial">
+      <Simbolo size={36} />
+    </a>
+
+    <nav aria-label="Principal">
+      <ul class="hidden gap-8 text-[15px] font-medium md:flex">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class:list={[
+                'py-2 transition-colors hover:text-floresta',
+                atual === l.href && 'border-b-2 border-terra',
+              ]}
+              aria-current={atual === l.href ? 'page' : undefined}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <details class="relative md:hidden">
+        <summary class="cursor-pointer list-none rounded-sm px-3 py-2 font-medium text-floresta">Menu</summary>
+        <ul class="absolute right-0 mt-2 w-56 rounded-md border border-borda bg-branco p-2 shadow-ec">
+          {links.map((l) => (
+            <li><a href={l.href} class="block rounded-sm px-3 py-3 hover:bg-verde-zebra">{l.label}</a></li>
+          ))}
+        </ul>
+      </details>
+    </nav>
+  </div>
+</header>

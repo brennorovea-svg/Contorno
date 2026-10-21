@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import Simbolo from '../components/Simbolo.astro';
+
+const fases = [
+  {
+    nome: 'Conceitual',
+    cor: 'bg-terra-claro',
+    itens: ['Briefing', 'Conceito', 'Projeto preliminar'],
+    texto: 'Entendemos como você vive e o que a obra precisa resolver. Você vê o espaço antes de gastar com ele.',
+  },
+  {
+    nome: 'Executivo',
+    cor: 'bg-terra-medio',
+    itens: ['Projeto executivo', 'Memorial descritivo', 'Fluxo financeiro'],
+    texto: 'Cada detalhe desenhado e cada custo previsto. A obra só começa com todos os orçamentos aprovados.',
+  },
+  {
+    nome: 'Gestão',
+    cor: 'bg-terra',
+    itens: ['Gerenciamento da obra', 'Compras', 'Produção'],
+    texto: 'Acompanhamos a execução de perto. Você acompanha tudo, como se estivesse na obra.',
+  },
+];
+
+// Provisório: substituir por obras reais (bairro, tipo, metragem, prazo) quando as fotos chegarem
+const obras = [
+  { tipo: 'Apartamento', bairro: 'Bairro', area: '— m²' },
+  { tipo: 'Restaurante', bairro: 'Bairro', area: '— m²' },
+  { tipo: 'Cozinha', bairro: 'Bairro', area: '— m²' },
+];
+---
+
+<Base title="Home">
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-verde">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-16 md:grid-cols-[1.2fr_1fr] md:px-8 md:pb-28 md:pt-24">
+      <div>
+        <p class="ec-label !text-floresta-profundo">+80 obras entregues em São Paulo</p>
+        <h1 class="ec-display mt-6 text-[40px] text-branco md:text-[64px]">
+          Vai reformar?<br />Planeje antes de quebrar.
+        </h1>
+        <p class="mt-6 max-w-lg text-lg text-floresta-profundo md:text-xl">
+          Arquitetura de qualidade ao menor custo possível. Planejamos cada etapa antes de a obra
+          começar e acompanhamos de perto, para entregar no prazo e no custo previstos.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="/contato" class="ec-btn ec-btn-destaque">Quero planejar minha obra</a>
+          <a href="/como-trabalhamos" class="ec-btn ec-btn-secundario text-floresta-profundo">Como funciona</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center md:justify-end">
+        <Simbolo size="100%" animate class="max-w-[220px] text-branco md:max-w-[360px]" />
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPOSTA DE VALOR -->
+  <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
+    <div class="grid gap-12 md:grid-cols-2" data-reveal="stagger">
+      <h2 class="ec-display ec-filete text-[28px] md:text-[40px]">Projeto e obra andam juntos</h2>
+      <p class="text-lg md:text-xl">
+        A maioria das reformas estoura prazo e orçamento porque começa sem planejamento. Aqui é ao
+        contrário: a obra só começa com todos os orçamentos aprovados, e quem desenhou o projeto é quem
+        acompanha a execução.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3 FASES -->
+  <section class="bg-branco py-24 md:py-32">
+    <div class="mx-auto max-w-6xl px-4 md:px-8">
+      <p class="ec-label">Como trabalhamos</p>
+      <h2 class="ec-display ec-filete mt-4 text-[28px] md:text-[40px]">Três fases, nenhuma surpresa</h2>
+
+      <div class="relative mt-16">
+        <div class="absolute left-0 right-0 top-[7px] hidden h-1 rounded-full bg-verde-zebra md:block">
+          <div data-fases-barra class="h-full origin-left rounded-full bg-terra"></div>
+        </div>
+
+        <ol class="grid gap-10 md:grid-cols-3" data-reveal="stagger">
+          {fases.map((f, i) => (
+            <li class="relative">
+              <span class:list={['block h-[18px] w-[18px] rounded-full ring-4 ring-branco', f.cor]}></span>
+              <p class="ec-label mt-6">Fase {i + 1}</p>
+              <h3 class="mt-2 text-2xl font-bold">{f.nome}</h3>
+              <p class="mt-3">{f.texto}</p>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {f.itens.map((item) => (
+                  <li class:list={['rounded-sm px-3 py-1 text-sm', f.cor]}>{item}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBRAS EM DESTAQUE -->
+  <section class="mx-auto max-w-6xl px-4 py-24 md:px-8 md:py-32">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <p class="ec-label">Obras entregues</p>
+        <h2 class="ec-display ec-filete mt-4 text-[28px] md:text-[40px]">No prazo e no custo</h2>
+      </div>
+      <a href="/obras" class="font-semibold underline decoration-terra decoration-2 underline-offset-4">Ver obras entregues</a>
+    </div>
+
+    <ul class="mt-12 grid gap-6 md:grid-cols-3" data-reveal="stagger">
+      {obras.map((o) => (
+        <li class="group">
+          <div class="flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md bg-verde-claro text-sm text-floresta transition-transform duration-500 group-hover:scale-[1.02]">
+            Foto da obra em breve
+          </div>
+          <p class="mt-4 font-semibold">{o.tipo}</p>
+          <p class="text-[15px] text-floresta">{o.bairro} · {o.area}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- CHAMADA FINAL -->
+  <section class="bg-verde-claro">
+    <div class="mx-auto flex max-w-6xl flex-col items-start gap-8 px-4 py-20 md:flex-row md:items-center md:justify-between md:px-8" data-reveal>
+      <h2 class="ec-display text-[28px] md:text-[40px]">Sua obra começa<br />no planejamento.</h2>
+      <a href="https://wa.me/5511981660262" class="ec-btn ec-btn-primario">Fale com a Malu</a>
+    </div>
+  </section>
+</Base>

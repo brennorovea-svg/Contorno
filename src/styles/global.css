@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/*
+  Tokens do manual de marca (seção 2).
+  Tudo que está em @theme vira classe do Tailwind:
+  --color-verde  -> bg-verde, text-verde, border-verde...
+  --font-titulo  -> font-titulo
+*/
+@theme {
+  /* Primárias */
+  --color-verde: #8FBEAB;            /* Verde Contorno: fundo de marca */
+  --color-floresta: #50625E;         /* SÓ detalhes. Nunca fundo */
+  --color-floresta-profundo: #384744;/* texto e títulos */
+
+  /* Apoio */
+  --color-verde-claro: #C7DFD5;
+  --color-verde-claro-2: #AACEBF;
+  --color-verde-zebra: #EEF5F2;
+  --color-grafismo: #6F9483;         /* SOMENTE no padrão sobre o verde */
+
+  /* Terracota (também é o código das fases) */
+  --color-terra-claro: #E7B6A7;      /* Conceitual */
+  --color-terra-medio: #DC947E;      /* Executivo */
+  --color-terra: #D68268;            /* Gestão, filetes */
+  --color-terra-destaque: #CB603F;   /* um CTA por página */
+
+  /* Neutros */
+  --color-gelo: #F8F8F8;
+  --color-branco: #FFFFFF;
+  --color-borda: #DCE3DF;
+
+  /* Tipografia: Heebo no lugar da Myriad até decidirmos o kit Adobe */
+  --font-texto: "Heebo", system-ui, sans-serif;
+  --font-titulo: "Montserrat", "Heebo", sans-serif;
+
+  /* Forma */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-ec: 0 4px 16px rgba(40, 50, 40, .12);
+}
+
+@layer base {
+  html {
+    background: var(--color-gelo);
+  }
+
+  body {
+    font-family: var(--font-texto);
+    font-weight: 400;
+    color: var(--color-floresta-profundo);
+    line-height: 1.5;
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (min-width: 768px) {
+    body { font-size: 1.125rem; }
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-terra-destaque);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Títulos de impacto: Montserrat 900, sempre caixa alta */
+  .ec-display {
+    font-family: var(--font-titulo);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.02;
+    letter-spacing: .01em;
+  }
+
+  .ec-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    font-size: .75rem;
+    color: var(--color-floresta);
+  }
+
+  /* Filete terracota 48 x 4 px sob títulos de seção */
+  .ec-filete::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 4px;
+    margin-top: 16px;
+    border-radius: 2px;
+    background: var(--color-terra);
+  }
+
+  .ec-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: background-color .2s, color .2s, transform .2s;
+  }
+  .ec-btn:hover { transform: translateY(-2px); }
+
+  .ec-btn-primario { background: var(--color-floresta); color: var(--color-gelo); }
+  .ec-btn-primario:hover { background: var(--color-floresta-profundo); }
+
+  .ec-btn-secundario { border: 2px solid currentColor; padding: 12px 26px; }
+
+  /* CTA de destaque: no máximo um por página, texto >= 18px bold */
+  .ec-btn-destaque {
+    background: var(--color-terra-destaque);
+    color: var(--color-gelo);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

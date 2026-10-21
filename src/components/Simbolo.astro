@@ -1,0 +1,50 @@
+---
+/*
+  Símbolo do Estúdio Contorno recriado a partir da geometria do manual (seção 3.4):
+  quadrado de cantos arredondados (raio ~8% do lado), traço de 5% do lado,
+  abertura à esquerda entre 39% e 65% da altura e à direita entre 57% e 82%.
+  Quando os SVGs oficiais chegarem (pasta logos/), este componente pode usá-los.
+*/
+interface Props {
+  size?: number | string;
+  animate?: boolean;
+  class?: string;
+  label?: string;
+}
+
+const { size = 64, animate = false, class: className = '', label } = Astro.props;
+---
+
+<svg
+  class:list={['ec-simbolo', { 'ec-simbolo--animado': animate }, className]}
+  width={size}
+  height={size}
+  viewBox="0 0 100 100"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  <path pathLength="1" d="M2.5 39 V10.5 A8 8 0 0 1 10.5 2.5 H89.5 A8 8 0 0 1 97.5 10.5 V57" />
+  <path pathLength="1" d="M97.5 82 V89.5 A8 8 0 0 1 89.5 97.5 H10.5 A8 8 0 0 1 2.5 89.5 V65" />
+</svg>
+
+<style>
+  .ec-simbolo { overflow: visible; }
+
+  /* O traço "se desenha": o tracejado começa todo vazio e vai sendo preenchido */
+  .ec-simbolo--animado path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: desenhar 1.6s cubic-bezier(.65, 0, .35, 1) forwards;
+  }
+  .ec-simbolo--animado path:nth-child(2) { animation-delay: .5s; }
+
+  @keyframes desenhar {
+    to { stroke-dashoffset: 0; }
+  }
+</style>
