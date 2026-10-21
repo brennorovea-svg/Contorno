@@ -1,20 +1,21 @@
 ---
 import Simbolo from './Simbolo.astro';
+import { url, semBase } from '../lib/url';
 
 const links = [
-  { href: '/como-trabalhamos', label: 'Como trabalhamos' },
-  { href: '/obras', label: 'Obras' },
-  { href: '/quem-sou-eu', label: 'Quem sou eu' },
-  { href: '/contato', label: 'Contato' },
+  { href: url('/como-trabalhamos'), label: 'Como trabalhamos' },
+  { href: url('/obras'), label: 'Obras' },
+  { href: url('/quem-sou-eu'), label: 'Quem sou eu' },
+  { href: url('/contato'), label: 'Contato' },
 ];
 
-const atual = Astro.url.pathname.replace(/\/$/, '');
+const atual = url(semBase(Astro.url.pathname)).replace(/\/$/, '');
 ---
 
 <header class="sticky top-0 z-40 bg-gelo/85 backdrop-blur border-b border-borda">
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:h-20 md:px-8">
     <!-- Provisório: trocar pelo SVG oficial contorno_horizontal_floresta.svg quando a pasta logos/ chegar -->
-    <a href="/" class="text-floresta" aria-label="Estúdio Contorno, página inicial">
+    <a href={url('/')} class="text-floresta" aria-label="Estúdio Contorno, página inicial">
       <Simbolo size={36} />
     </a>
 
