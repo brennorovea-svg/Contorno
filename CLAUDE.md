@@ -34,12 +34,11 @@ Leia isto antes de qualquer mudança. O que está aqui já foi decidido com o Br
 1. Mude só o que foi pedido. Uma mudança por PR, com título e descrição em português.
 2. Caminhos internos sempre por `url()` de `src/lib/url.ts` (o site mora em `/Contorno/` no GitHub Pages).
 3. `npm run build` tem que passar.
-4. Rode `npm run prints` e anexe os 5 prints da Home ao PR (veja abaixo).
-5. Confira o checklist rápido: textos em "você", contraste (texto pequeno sobre verde em Floresta profundo), `prefers-reduced-motion` respeitado, foco visível.
+4. Confira o checklist rápido: textos em "você", contraste (texto pequeno sobre verde em Floresta profundo), `prefers-reduced-motion` respeitado, foco visível.
 
 ## Prints em 5 tamanhos
 
-`npm run prints` gera o site, sobe uma prévia e salva prints de página inteira em `prints/` nos tamanhos 360, 390, 768, 1280 e 1920 px de largura. A pasta `prints/` não vai para o git. Precisa do Chromium do Playwright, que já vem instalado no ambiente na nuvem.
+Só quando o Brenno pedir. `npm run prints` gera o site, sobe uma prévia e salva prints de página inteira em `prints/` nos tamanhos 360, 390, 768, 1280 e 1920 px de largura. A pasta `prints/` não vai para o git. Precisa do Chromium do Playwright, que já vem instalado no ambiente na nuvem.
 
 ## Pendências que dependem de pessoas (não tente resolver sozinho)
 
