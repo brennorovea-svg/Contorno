@@ -1,15 +1,14 @@
 ---
 import Simbolo from './Simbolo.astro';
-import { url, semBase } from '../lib/url';
+import { url } from '../lib/url';
 
+// Site de página única: o menu rola até as seções da Home
 const links = [
-  { href: url('/como-trabalhamos'), label: 'Como trabalhamos' },
-  { href: url('/obras'), label: 'Obras' },
-  { href: url('/quem-sou-eu'), label: 'Quem sou eu' },
-  { href: url('/contato'), label: 'Contato' },
+  { href: '#como-trabalhamos', label: 'Como trabalhamos' },
+  { href: '#obras', label: 'Obras' },
+  { href: '#quem-e-a-malu', label: 'Quem sou eu' },
+  { href: '#contato', label: 'Contato' },
 ];
-
-const atual = url(semBase(Astro.url.pathname)).replace(/\/$/, '');
 ---
 
 <header class="sticky top-0 z-40 bg-gelo/85 backdrop-blur border-b border-borda">
@@ -25,11 +24,7 @@ const atual = url(semBase(Astro.url.pathname)).replace(/\/$/, '');
           <li>
             <a
               href={l.href}
-              class:list={[
-                'py-2 transition-colors hover:text-floresta',
-                atual === l.href && 'border-b-2 border-terra',
-              ]}
-              aria-current={atual === l.href ? 'page' : undefined}
+              class="py-2 transition-colors hover:text-floresta"
             >
               {l.label}
             </a>
@@ -37,7 +32,7 @@ const atual = url(semBase(Astro.url.pathname)).replace(/\/$/, '');
         ))}
       </ul>
 
-      <details class="relative md:hidden">
+      <details class="relative md:hidden" data-menu>
         <summary class="cursor-pointer list-none rounded-sm px-3 py-2 font-medium text-floresta">Menu</summary>
         <ul class="absolute right-0 mt-2 w-56 rounded-md border border-borda bg-branco p-2 shadow-ec">
           {links.map((l) => (
@@ -48,3 +43,9 @@ const atual = url(semBase(Astro.url.pathname)).replace(/\/$/, '');
     </nav>
   </div>
 </header>
+
+<script>
+  // No celular, fecha o menu depois de escolher uma seção
+  const menu = document.querySelector<HTMLDetailsElement>('[data-menu]');
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => (menu.open = false)));
+</script>

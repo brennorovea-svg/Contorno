@@ -12,3 +12,6 @@ dist/
 hairline-*-look.png
 hairline-*-blind.png
 hairline-*-motion.png
+
+# Prints de revisão (npm run prints)
+prints/

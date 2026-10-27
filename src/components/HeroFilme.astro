@@ -6,7 +6,6 @@
   As três fases são capítulos clicáveis; há botão de pausa, e quem prefere
   menos movimento vê o quadro parado.
 */
-import { url } from '../lib/url';
 
 interface Props {
   whatsapp: string;
@@ -24,7 +23,7 @@ const { whatsapp } = Astro.props;
     <div class="acoes">
       <a class="btn" href={whatsapp}>Quero planejar minha obra</a>
       <a class="link" href="#como-trabalhamos">Como funciona</a>
-      <a class="link" href={url('/obras')}>Obras entregues</a>
+      <a class="link" href="#obras">Obras entregues</a>
     </div>
   </div>
 

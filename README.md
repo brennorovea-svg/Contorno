@@ -15,7 +15,10 @@ Precisa do [Node.js](https://nodejs.org) 22 ou mais novo.
 npm install      # instala as dependências (uma vez)
 npm run dev      # abre o site em http://localhost:4321 e atualiza a cada alteração
 npm run build    # gera a versão final na pasta dist/
+npm run prints   # prints da página em 5 larguras, na pasta prints/
 ```
+
+As regras fixas do projeto estão em `CLAUDE.md` e o visual congelado em `DESIGN.md`.
 
 ## Onde fica cada coisa
 
@@ -24,7 +27,7 @@ npm run build    # gera a versão final na pasta dist/
 | `src/styles/global.css` | Cores, fontes e componentes do manual de marca (tudo em `@theme` vira classe do Tailwind, ex.: `bg-verde`) |
 | `src/layouts/Base.astro` | Esqueleto de toda página: `<head>`, SEO, cabeçalho, rodapé, botão de WhatsApp |
 | `src/components/` | Peças reutilizáveis (símbolo da marca, cabeçalho, rodapé...) |
-| `src/pages/` | Cada arquivo vira uma página. `obras.astro` → `/obras` |
+| `src/pages/index.astro` | A página única do site, com todas as seções |
 | `src/scripts/motion.ts` | Scroll suave e animações. Use `data-reveal` em qualquer elemento para ele aparecer ao rolar |
 | `public/` | Arquivos servidos como estão (favicon, imagens, logos) |
 

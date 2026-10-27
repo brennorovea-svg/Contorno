@@ -32,9 +32,9 @@ Clients buy one of three packages: 1 = Conceitual · 2 = Conceitual + Executivo 
 
 ## Capabilities and Constraints
 
-- Pages: Home, Quem sou eu, Obras, Como trabalhamos, Contato. A floating WhatsApp button appears on every page.
+- One page with anchored sections: first screen, the 3 phases, packages, works, Malu, contact. A floating WhatsApp button appears on every page.
 - Local SEO for São Paulo: "reforma de apartamento São Paulo", "arquiteta para reforma", "gerenciamento de obra".
-- Stack: Astro + Tailwind CSS + GSAP/Lenis, static hosting (Cloudflare Pages or Netlify).
+- Stack: Astro + Tailwind CSS + GSAP/Lenis, static hosting on GitHub Pages.
 - Undecided: Myriad Pro via the Adobe Fonts kit or Heebo as its substitute (Heebo in use for now).
 
 ## Brand Commitments

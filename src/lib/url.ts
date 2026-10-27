@@ -3,4 +3,3 @@
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export const url = (caminho: string) => base + caminho;
-export const semBase = (caminho: string) => caminho.slice(base.length) || '/';

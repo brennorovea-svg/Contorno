@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Room from '../components/Room.astro';
 import HeroFilme from '../components/HeroFilme.astro';
-import { url } from '../lib/url';
 
 const whatsapp =
   'https://wa.me/5511981660262?text=' +
@@ -136,7 +135,7 @@ const passagem: [number, number] = [0.7, 0.9];
   </section>
 
   <!-- OBRAS -->
-  <section class="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-20">
+  <section id="obras" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 md:px-8 md:py-20">
     <div class="grid gap-10 md:grid-cols-[1fr_1.3fr] md:items-center">
       <div>
         <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Obras entregues</h2>
@@ -155,12 +154,42 @@ const passagem: [number, number] = [0.7, 0.9];
     </div>
   </section>
 
-  <!-- FECHAMENTO -->
-  <section class="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-20">
+  <!-- QUEM É A MALU -->
+  <!-- Provisório: texto para a revisão da Malu; trocar o espaço reservado pela foto dela na obra -->
+  <section id="quem-e-a-malu" class="bg-branco scroll-mt-24">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_1.2fr] md:items-center md:px-8 md:py-20">
+      <div class="flex aspect-[4/3] items-center md:aspect-[4/5] justify-center rounded-lg bg-verde-claro text-floresta md:order-2">
+        Foto da Malu na obra em breve
+      </div>
+      <div>
+        <h2 class="ec-display ec-filete text-[clamp(1.75rem,3.6vw,2.5rem)]">Quem desenha, acompanha</h2>
+        <p class="mt-6 max-w-[48ch] text-lg">
+          Sou a Malu. Desde 2021 cuido de cada obra do Estúdio Contorno do primeiro desenho até a entrega. Já são
+          mais de 80 obras em São Paulo.
+        </p>
+        <p class="mt-4 max-w-[48ch] text-lg">
+          Você não recebe um projeto e fica sozinho com a obra. Eu aprovo os orçamentos com você antes de começar e
+          estou lá durante a execução, para que o combinado no papel vire o que é entregue.
+        </p>
+        <p class="ec-label mt-8">Estúdio Contorno / Malu Burato</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 md:px-8 md:py-20">
     <Room left={[0.3, 0.7]} stroke={14} radius={28}>
-      <div class="flex flex-col items-start gap-8 px-8 py-14 md:flex-row md:items-center md:justify-between md:px-16">
-        <p class="ec-display text-[clamp(1.75rem,3.6vw,2.5rem)]">Sua obra começa<br />no planejamento.</p>
-        <a href={whatsapp} class="ec-btn ec-btn-primario">Fale com a Malu</a>
+      <div class="grid gap-10 px-8 py-14 md:grid-cols-[1.2fr_1fr] md:items-center md:px-16">
+        <div>
+          <p class="ec-display text-[clamp(1.75rem,3.6vw,2.5rem)]">Sua obra começa<br />no planejamento.</p>
+          <p class="mt-6 max-w-[40ch] text-lg">Conte o que você quer reformar. A Malu responde pelo WhatsApp.</p>
+          <a href={whatsapp} class="ec-btn ec-btn-primario mt-8">Fale com a Malu</a>
+        </div>
+        <ul class="space-y-3 text-[17px]">
+          <li><span class="ec-label block">WhatsApp</span><a class="font-semibold underline decoration-terra decoration-2 underline-offset-[6px]" href={whatsapp}>(11) 98166-0262</a></li>
+          <li><span class="ec-label block">E-mail</span><a class="font-semibold underline decoration-terra decoration-2 underline-offset-[6px]" href="mailto:malu@estudiocontorno.com.br">malu@estudiocontorno.com.br</a></li>
+          <li><span class="ec-label block">Instagram</span><a class="font-semibold underline decoration-terra decoration-2 underline-offset-[6px]" href="https://www.instagram.com/estudiocontorno/">@estudiocontorno</a></li>
+        </ul>
       </div>
     </Room>
   </section>
