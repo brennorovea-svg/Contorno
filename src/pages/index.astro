@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Room from '../components/Room.astro';
-import Planta from '../components/Planta.astro';
+import HeroFilme from '../components/HeroFilme.astro';
 import { url } from '../lib/url';
 
 const whatsapp =
@@ -40,38 +40,8 @@ const passagem: [number, number] = [0.7, 0.9];
 ---
 
 <Base title="Home">
-  <!-- PRIMEIRA TELA: a planta -->
-  <section class="hero mx-auto max-w-6xl px-4 pb-12 pt-14 md:px-8 md:pb-16 md:pt-20">
-    <div class="cota cota--top" aria-hidden="true">
-      <span class="cota__line"></span>
-      <span class="cota__label">+80 obras entregues</span>
-    </div>
-    <div class="cota cota--left" aria-hidden="true">
-      <span class="cota__line"></span>
-      <span class="cota__label">desde 2021</span>
-    </div>
-
-    <Room left={[0.39, 0.65]} right={[0.57, 0.82]} stroke={28} strokeMobile={14} radius={52} draw class="hero__room">
-      <div class="grid items-center gap-2 px-8 py-12 md:grid-cols-[1.1fr_1fr] md:gap-6 md:px-16 md:py-10 lg:px-20">
-        <div>
-        <h1 class="ec-display max-w-[11ch] text-[clamp(2.5rem,7.5vw,5.5rem)]">Planeje antes de quebrar.</h1>
-        <p class="mt-6 max-w-[38ch] text-lg md:text-xl">
-          A obra só começa com todos os orçamentos aprovados. Quem desenha o projeto acompanha a execução, para entregar
-          no prazo e no custo previstos.
-        </p>
-        <a href={whatsapp} class="ec-btn ec-btn-destaque mt-10">Quero planejar minha obra</a>
-        </div>
-        <Planta class="planta-hero mx-auto w-full max-w-[560px]" />
-      </div>
-
-      <a slot="outside" href="#como-trabalhamos" class="abertura abertura--porta">
-        Como trabalhamos
-      </a>
-      <a slot="outside" href={url('/obras')} class="abertura abertura--janela">
-        Obras entregues
-      </a>
-    </Room>
-  </section>
+  <!-- PRIMEIRA TELA: o filme da planta -->
+  <HeroFilme whatsapp={whatsapp} />
 
   <!-- AFIRMAÇÃO -->
   <section class="bg-verde">
@@ -197,119 +167,6 @@ const passagem: [number, number] = [0.7, 0.9];
 </Base>
 
 <style>
-  .hero {
-    position: relative;
-  }
-
-  /* O desenho do Hairline tem margem própria dentro da caixa 5:4; ampliamos a caixa inteira
-     (palco e svg juntos, para o cursor continuar alinhado) e recolhemos a sobra */
-  .hero :global(.planta-hero .planta__stage) {
-    transform: scale(1.22);
-    transform-origin: 50% 78%;
-  }
-  .hero :global(.planta-hero) {
-    margin-block: -1rem -1rem;
-  }
-  .hero :global(.planta-hero .planta__read) {
-    position: relative;
-    margin-top: .75rem;
-  }
-  @media (min-width: 768px) {
-    .hero :global(.planta-hero) { margin-block: -1rem -2rem; }
-  }
-
-  /* Cotas: linhas de medida como num desenho técnico */
-  .cota {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-floresta);
-    opacity: 0;
-    animation: cota-in .8s ease-out 1.3s forwards;
-  }
-  .cota__line {
-    position: absolute;
-    background: currentColor;
-  }
-  .cota__line::before,
-  .cota__line::after {
-    content: "";
-    position: absolute;
-    background: currentColor;
-  }
-  .cota__label {
-    position: relative;
-    padding: 0 12px;
-    background: var(--color-gelo);
-    font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-  }
-
-  .cota--top {
-    left: 1rem;
-    right: 1rem;
-    top: 1.25rem;
-    height: 1.5rem;
-  }
-  .cota--top .cota__line { left: 0; right: 0; top: 50%; height: 1px; }
-  .cota--top .cota__line::before,
-  .cota--top .cota__line::after { top: -6px; width: 1px; height: 13px; }
-  .cota--top .cota__line::before { left: 0; }
-  .cota--top .cota__line::after { right: 0; }
-
-  .cota--left { display: none; }
-
-  @media (min-width: 768px) {
-    .cota--top { left: 2rem; right: 2rem; top: 2.5rem; }
-    .cota--left {
-      display: flex;
-      left: -.75rem;
-      top: 5rem;
-      bottom: 7rem;
-      width: 1.5rem;
-    }
-    .cota--left .cota__line { top: 0; bottom: 0; left: 50%; width: 1px; }
-    .cota--left .cota__line::before,
-    .cota--left .cota__line::after { left: -6px; height: 1px; width: 13px; }
-    .cota--left .cota__line::before { top: 0; }
-    .cota--left .cota__line::after { bottom: 0; }
-    .cota--left .cota__label { writing-mode: vertical-rl; transform: rotate(180deg); padding: 12px 0; }
-  }
-
-  @keyframes cota-in { to { opacity: 1; } }
-
-  /* Porta e janela: as aberturas da planta são links */
-  .abertura {
-    position: absolute;
-    z-index: 1;
-    writing-mode: vertical-rl;
-    padding: 4px;
-    font-weight: 600;
-    font-size: .75rem;
-    letter-spacing: .04em;
-    color: var(--color-floresta-profundo);
-    transition: color .2s;
-    white-space: nowrap;
-  }
-  @media (min-width: 768px) {
-    .abertura { font-size: .875rem; }
-  }
-  .abertura:hover { color: var(--color-terra-destaque); }
-  .abertura--porta {
-    left: 0;
-    top: 52%;
-    transform: translate(-50%, -50%) rotate(180deg);
-  }
-  .abertura--janela {
-    right: 0;
-    top: 69.5%;
-    transform: translate(50%, -50%);
-  }
-
-
   /* Percurso: linha tracejada que atravessa as portas das 3 fases */
   .percurso {
     display: none;
