@@ -1,0 +1,463 @@
+---
+/*
+  Primeira tela da Home: um "filme" desenhado em canvas, em loop de 18 s,
+  sobre o Verde Contorno. A planta se desenha (Conceitual), ganha cotas e
+  móveis (Executivo) e sobe como prédio com as janelas acesas (Gestão).
+  As três fases são capítulos clicáveis; há botão de pausa, e quem prefere
+  menos movimento vê o quadro parado.
+*/
+import { url } from '../lib/url';
+
+interface Props {
+  whatsapp: string;
+}
+const { whatsapp } = Astro.props;
+---
+
+<section class="hero" aria-label="Primeira tela">
+  <canvas id="filme" aria-hidden="true"></canvas>
+
+  <div class="wrap texto">
+    <p class="rotulo">+80 obras entregues em São Paulo</p>
+    <h1>Planeje antes de quebrar.</h1>
+    <p class="apoio">A obra só começa com todos os orçamentos aprovados. Quem desenha o projeto acompanha a execução, para entregar no prazo e no custo previstos.</p>
+    <div class="acoes">
+      <a class="btn" href={whatsapp}>Quero planejar minha obra</a>
+      <a class="link" href="#como-trabalhamos">Como funciona</a>
+      <a class="link" href={url('/obras')}>Obras entregues</a>
+    </div>
+  </div>
+
+  <div class="wrap controle">
+    <div class="capitulos" role="group" aria-label="Fases do filme">
+      <button class="cap" type="button" data-cap="0" style="--c: var(--color-terra-claro)"><span>Conceitual</span><i><b></b></i></button>
+      <button class="cap" type="button" data-cap="1" style="--c: var(--color-terra-medio)"><span>Executivo</span><i><b></b></i></button>
+      <button class="cap" type="button" data-cap="2" style="--c: var(--color-terra)"><span>Gestão</span><i><b></b></i></button>
+    </div>
+    <button class="pausa" id="pausa" type="button" aria-pressed="false">Pausar</button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const C = {
+    verde: '#8FBEAB', grafismo: '#6F9483', branco: '#FFFFFF', profundo: '#384744',
+    claro: '#C7DFD5', terraClaro: '#E7B6A7', terraMedio: '#DC947E', terra: '#D68268',
+  };
+  const T = 18;                          // duração do loop, em segundos
+  const FASES = [0, 6, 12];              // início de cada capítulo
+  const cv = document.getElementById('filme') as HTMLCanvasElement;
+  const ctx = cv.getContext('2d');
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, dpr = 1, t = reduz ? 16.2 : 0, rodando = !reduz, ultimo = 0;
+
+  // ---------- A planta (metros) ----------
+  // Apartamento de 12 x 8 m com varanda; paredes com as aberturas de portas e janelas
+  const paredes = [
+    [0,0, 2.6,0], [4.6,0, 6.2,0], [7.8,0, 12,0],          // fachada com janelas
+    [12,0, 12,8],
+    [12,8, 8.6,8], [4.4,8, 0,8],                            // abertura para a varanda
+    [0,8, 0,0],
+    [4.5,0, 4.5,4], [0,4, 3.2,4], [4.2,4, 4.5,4],           // quarto 1
+    [8.5,0, 8.5,4], [4.5,4, 5.3,4], [6.3,4, 8.5,4],         // quarto 2
+    [8.5,3, 9.9,3], [10.8,3, 12,3],                         // banheiro
+    [8.5,4, 8.5,5.4],                                       // meia parede da cozinha
+  ];
+  const varanda = [[4.4,8, 4.4,9.6], [4.4,9.6, 8.6,9.6], [8.6,9.6, 8.6,8]];
+  const vidro = [[4.4,8, 8.6,8]];
+  const janelas = [[2.6,0, 4.6,0], [6.2,0, 7.8,0]];
+  const moveis = [
+    { r: [0.6,0.6, 2.2,2.4] },  { r: [0.6,0.9, 2.2,0.6], fino: 1 },     // cama e travesseiros
+    { r: [5.1,0.6, 1.8,2.2] },
+    { r: [9.0,0.4, 2.6,0.9] },                                        // banheira
+    { r: [11.1,4.0, 0.6,3.4] },                                       // bancada
+    { r: [0.6,5.0, 3.0,0.95] }, { r: [0.6,5.95, 0.95,1.5] },          // sofa em L
+    { c: [6.6,6.0, 0.85] },                                           // mesa
+  ];
+  const ambientes = [
+    { n: 'QUARTO', x: 2.25, y: 3.4, a: '3,90 x 4,00' },
+    { n: 'SUÍTE', x: 6.5, y: 3.4, a: '4,00 x 4,00' },
+    { n: 'BANHO', x: 10.25, y: 2.4, a: '' },
+    { n: 'SALA', x: 2.6, y: 7.6, a: '7,90 x 4,00' },
+    { n: 'COZINHA', x: 10.0, y: 7.6, a: '' },
+  ];
+  const comp = (s) => Math.hypot(s[2]-s[0], s[3]-s[1]);
+  const total = paredes.reduce((a, s) => a + comp(s), 0);
+
+  // ---------- utilidades de tempo ----------
+  const clamp = (v, a=0, b=1) => Math.max(a, Math.min(b, v));
+  const ease = (v) => v < .5 ? 4*v*v*v : 1 - Math.pow(-2*v+2, 3)/2;
+  const janela = (t, a, b) => ease(clamp((t - a) / (b - a)));
+
+  // ---------- câmera: planta vista de cima que gira para a isométrica ----------
+  let cam;
+  function camera(t) {
+    const larga = W >= 820;
+    const u = larga ? Math.min(W * 0.036, H * 0.052) : Math.min(W * 0.056, H * 0.034);
+    const iso = janela(t, 11.6, 14.2);
+    const ang = (-5 + 3 * (t / T)) * Math.PI / 180 * (1 - iso) + (Math.PI / 4) * iso;
+    const k = 1 - 0.44 * iso;
+    const zoom = 1 + 0.10 * (t / T) - 0.22 * iso;
+    const cx = larga ? W * 0.76 - u * 0.6 * (t / T) : W * 0.6;
+    const cy = larga ? H * (0.50 + 0.20 * iso) : H * (0.24 + 0.12 * iso);
+    cam = { u: u * zoom, cos: Math.cos(ang), sin: Math.sin(ang), k, cx, cy, iso };
+  }
+  function P(x, y, z = 0) {
+    const a = x - 6, b = y - 4.8;
+    const ru = a * cam.cos - b * cam.sin, rv = a * cam.sin + b * cam.cos;
+    return [cam.cx + ru * cam.u, cam.cy + rv * cam.k * cam.u - z * cam.u];
+  }
+  function linha(s, z = 0, frac = 1) {
+    const [x0, y0, x1, y1] = s;
+    const a = P(x0, y0, z), b = P(x0 + (x1 - x0) * frac, y0 + (y1 - y0) * frac, z);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  function retangulo(x, y, w, h, z = 0) {
+    const pts = [P(x,y,z), P(x+w,y,z), P(x+w,y+h,z), P(x,y+h,z)];
+    ctx.beginPath(); ctx.moveTo(...pts[0]); for (const p of pts.slice(1)) ctx.lineTo(...p); ctx.closePath();
+  }
+
+  // ---------- grafismo da marca: módulos do símbolo, densos à direita ----------
+  function modulo(x, y, s) {
+    const r = s * .08, e = s / 2;
+    ctx.lineWidth = s * .05;
+    ctx.beginPath();
+    ctx.moveTo(x - e, y - e + s * .39);
+    ctx.lineTo(x - e, y - e + r); ctx.arcTo(x - e, y - e, x - e + r, y - e, r);
+    ctx.lineTo(x + e - r, y - e); ctx.arcTo(x + e, y - e, x + e, y - e + r, r);
+    ctx.lineTo(x + e, y - e + s * .57);
+    ctx.moveTo(x + e, y - e + s * .82);
+    ctx.lineTo(x + e, y + e - r); ctx.arcTo(x + e, y + e, x + e - r, y + e, r);
+    ctx.lineTo(x - e + r, y + e); ctx.arcTo(x - e, y + e, x - e, y + e - r, r);
+    ctx.lineTo(x - e, y - e + s * .65);
+    ctx.stroke();
+  }
+  const hash = (i, j) => { const v = Math.sin(i * 127.1 + j * 311.7) * 43758.5453; return v - Math.floor(v); };
+  function grafismo(t) {
+    const s = Math.max(120, Math.min(W, H) * 0.2), passo = s * 1.32;
+    const deriva = (t / T) * passo;                  // sobe um módulo por loop: emenda sem salto
+    ctx.strokeStyle = C.grafismo; ctx.lineCap = 'round';
+    const cols = Math.ceil(W / passo) + 2, rows = Math.ceil(H / passo) + 3;
+    for (let i = -1; i < cols; i++) {
+      const x = i * passo + passo / 2;
+      const dens = clamp((x / W - 0.42) / 0.5);     // abre para a esquerda até terminar
+      for (let j = -1; j < rows; j++) {
+        const jj = j + Math.floor(deriva / passo);
+        if (hash(i, jj) > dens * 0.95) continue;
+        const y = j * passo + (i % 2 ? passo / 2 : 0) - (deriva % passo) + passo / 2;
+        modulo(x, y, s);
+      }
+    }
+  }
+
+  // ---------- grão de película ----------
+  const grao = document.createElement('canvas'); grao.width = grao.height = 160;
+  (() => {
+    const g = grao.getContext('2d'), img = g.createImageData(160, 160);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = Math.random() * 255; img.data[i] = img.data[i+1] = img.data[i+2] = v; img.data[i+3] = 22;
+    }
+    g.putImageData(img, 0, 0);
+  })();
+
+  // ---------- quadro ----------
+  function quadro(t) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = C.verde; ctx.fillRect(0, 0, W, H);
+    grafismo(t);
+    camera(t);
+
+    const surge = janela(t, 0, 1.2), some = 1 - janela(t, 17.1, 18);
+    ctx.save();
+    ctx.globalAlpha = surge * some;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const px = Math.max(1, cam.u / 34);             // espessura de base, acompanha a escala
+
+    // Gestão: o prédio sobe (pavimentos sobre a planta)
+    const andares = 4, ph = 2.3, sobe = janela(t, 13.4, 16.4);
+    if (cam.iso > 0.01) {
+      const contorno = [[0,0],[12,0],[12,8],[0,8]];
+      for (let a = andares; a >= 1; a--) {
+        const z = ph * a * sobe, vis = clamp(sobe * andares - (a - 1));
+        if (vis <= 0) continue;
+        ctx.globalAlpha = surge * some * vis;
+        // laje
+        ctx.strokeStyle = C.branco; ctx.lineWidth = px * 2.2;
+        ctx.beginPath(); contorno.forEach(([x, y], i) => { const p = P(x, y, z); i ? ctx.lineTo(...p) : ctx.moveTo(...p); }); ctx.closePath(); ctx.stroke();
+        // janelas acesas na fachada (as mesmas aberturas da planta)
+        const acesa = clamp((t - 14.6 - a * 0.25) / 0.6);
+        ctx.fillStyle = C.terraClaro;
+        // só nas duas fachadas que a câmera vê (y = 8 e x = 12)
+        ctx.globalAlpha = surge * some * vis * (0.3 + 0.7 * acesa);
+        const vaos = [[1.0, 8, 3.4, 8], [5.0, 8, 8.0, 8], [9.4, 8, 11.2, 8], [12, 5.6, 12, 7.2], [12, 0.8, 12, 3.2]];
+        for (const [x0, y0, x1, y1] of vaos) {
+          ctx.beginPath();
+          const q = [P(x0, y0, z - 0.5), P(x1, y1, z - 0.5), P(x1, y1, z - ph + 0.5), P(x0, y0, z - ph + 0.5)];
+          ctx.moveTo(...q[0]); q.slice(1).forEach(p => ctx.lineTo(...p)); ctx.closePath(); ctx.fill();
+        }
+      }
+      // pilares de canto
+      ctx.globalAlpha = surge * some * clamp(sobe * 3);
+      ctx.strokeStyle = C.branco; ctx.lineWidth = px * 1.4;
+      for (const [x, y] of [[0,0],[12,0],[12,8],[0,8]]) {
+        const a = P(x, y, 0), b = P(x, y, ph * andares * sobe);
+        ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke();
+      }
+      ctx.globalAlpha = surge * some;
+    }
+
+    // Executivo: ambientes coloridos pelas fases (só um véu, sob as paredes)
+    const tinge = janela(t, 9.5, 11.5) * (1 - cam.iso * 0.5);
+    if (tinge > 0) {
+      ctx.fillStyle = C.claro; ctx.globalAlpha = surge * some * tinge * 0.55;
+      retangulo(0, 0, 12, 8); ctx.fill();
+      ctx.globalAlpha = surge * some;
+    }
+
+    // Conceitual: as paredes se desenham, como a mão no papel
+    const p = janela(t, 0.4, 5.6) * total;
+    ctx.strokeStyle = C.branco; ctx.lineWidth = px * 6;
+    let acum = 0;
+    for (const s of paredes) {
+      const l = comp(s);
+      if (p > acum) linha(s, 0, clamp((p - acum) / l));
+      acum += l;
+    }
+    // varanda e vidro
+    const v = janela(t, 4.8, 6.2);
+    if (v > 0) {
+      ctx.lineWidth = px * 2.4; varanda.forEach(s => linha(s, 0, v));
+      ctx.lineWidth = px * 1.2; vidro.forEach(s => linha(s, 0, v));
+    }
+
+    // Executivo: cotas, móveis tracejados e nomes dos ambientes
+    const cota = janela(t, 6.2, 7.6) * (1 - cam.iso);
+    if (cota > 0) {
+      ctx.globalAlpha = surge * some * cota;
+      ctx.strokeStyle = C.profundo; ctx.lineWidth = px * 1.1;
+      const o = -1.0;
+      linha([0, o, 12 * cota, o]); linha([0, o - .25, 0, o + .25]); if (cota > .98) linha([12, o - .25, 12, o + .25]);
+      linha([o, 0, o, 8 * cota]); linha([o - .25, 0, o + .25, 0]); if (cota > .98) linha([o - .25, 8, o + .25, 8]);
+      ctx.fillStyle = C.profundo; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `700 ${Math.max(10, cam.u * .34)}px Heebo, sans-serif`;
+      const pt = P(6, o - .45); ctx.fillText('12,00', pt[0], pt[1]);
+      const pl = P(o - .5, 4); ctx.save(); ctx.translate(pl[0], pl[1]); ctx.rotate(-Math.PI / 2 + Math.atan2(cam.sin, cam.cos)); ctx.fillText('8,00', 0, 0); ctx.restore();
+    }
+    const mv = janela(t, 7.0, 9.6) * (1 - cam.iso);
+    if (mv > 0) {
+      ctx.strokeStyle = C.branco; ctx.setLineDash([px * 4, px * 4]);
+      moveis.forEach((m, i) => {
+        const a = clamp(mv * moveis.length - i);
+        if (a <= 0) return;
+        ctx.globalAlpha = surge * some * a; ctx.lineWidth = px * (m.fino ? 1 : 1.6);
+        if (m.r) { retangulo(...m.r); ctx.stroke(); }
+        else { const [x, y, r] = m.c; ctx.beginPath(); for (let k = 0; k <= 40; k++) { const q = P(x + r * Math.cos(k / 40 * 6.283), y + r * Math.sin(k / 40 * 6.283)); k ? ctx.lineTo(...q) : ctx.moveTo(...q); } ctx.stroke(); }
+      });
+      ctx.setLineDash([]);
+    }
+    const nomes = janela(t, 8.2, 10) * (1 - cam.iso);
+    if (nomes > 0 && cam.u > 22) {
+      ctx.globalAlpha = surge * some * nomes; ctx.fillStyle = C.profundo; ctx.textAlign = 'center';
+      ambientes.forEach(a => {
+        const q = P(a.x, a.y);
+        ctx.font = `700 ${Math.max(9, cam.u * .26)}px Heebo, sans-serif`; ctx.fillText(a.n, q[0], q[1]);
+        if (a.a) { ctx.font = `400 ${Math.max(9, cam.u * .22)}px Heebo, sans-serif`; ctx.fillText(a.a, q[0], q[1] + cam.u * .32); }
+      });
+    }
+    ctx.restore();
+
+    // véu para a leitura do texto: verde sólido à esquerda (desktop) ou embaixo (celular)
+    const larga = W >= 820;
+    const g = larga ? ctx.createLinearGradient(0, 0, W * 0.62, 0) : ctx.createLinearGradient(0, H, 0, H * 0.3);
+    g.addColorStop(0, 'rgba(143,190,171,.95)'); g.addColorStop(larga ? .55 : .62, 'rgba(143,190,171,.88)'); g.addColorStop(1, 'rgba(143,190,171,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    // vinheta e grão: o que dá cara de filme
+    const vg = ctx.createRadialGradient(W * .6, H * .45, Math.min(W, H) * .3, W * .5, H * .5, Math.max(W, H) * .8);
+    vg.addColorStop(0, 'rgba(56,71,68,0)'); vg.addColorStop(1, 'rgba(56,71,68,.16)');
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    if (!reduz) {
+      ctx.save(); ctx.globalCompositeOperation = 'overlay';
+      ctx.fillStyle = ctx.createPattern(grao, 'repeat');
+      const ox = (Math.random() * 160) | 0, oy = (Math.random() * 160) | 0;
+      ctx.translate(-ox, -oy); ctx.fillRect(0, 0, W + 160, H + 160); ctx.restore();
+    }
+  }
+
+  // ---------- capítulos ----------
+  const caps = [...document.querySelectorAll('.cap')];
+  function marcar(t) {
+    caps.forEach((b, i) => {
+      const a = FASES[i], z = FASES[i + 1] ?? T;
+      b.querySelector('b').style.width = (clamp((t - a) / (z - a)) * 100) + '%';
+      b.setAttribute('aria-current', t >= a && t < z ? 'step' : 'false');
+    });
+  }
+  caps.forEach((b, i) => b.addEventListener('click', () => { t = FASES[i] + 0.01; if (!rodando) { quadro(t); marcar(t); } }));
+  const pausa = document.getElementById('pausa');
+  function rotulo() { pausa.textContent = rodando ? 'Pausar' : 'Tocar'; pausa.setAttribute('aria-pressed', String(!rodando)); }
+  pausa.addEventListener('click', () => { rodando = !rodando; ultimo = 0; rotulo(); if (rodando) requestAnimationFrame(loop); });
+  rotulo();
+
+  function medir() {
+    const r = cv.getBoundingClientRect();
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    quadro(t); marcar(t);
+  }
+  function loop(ms) {
+    if (!rodando) return;
+    if (ultimo) t = (t + Math.min(.05, (ms - ultimo) / 1000)) % T;
+    ultimo = ms;
+    quadro(t); marcar(t);
+    requestAnimationFrame(loop);
+  }
+  new ResizeObserver(medir).observe(cv);
+  document.fonts?.ready.then(() => quadro(t));
+  medir();
+  if (rodando) requestAnimationFrame(loop);
+})();
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-verde);
+    min-height: min(calc(100svh - 5rem), 760px);
+    display: flex;
+    flex-direction: column;
+  }
+  .hero :global(canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: block;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 768px) {
+    .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+  }
+
+  /* Texto da primeira tela */
+  .texto {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding-block: 40px 32px;
+  }
+  .rotulo {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-titulo);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.0;
+    letter-spacing: .01em;
+    color: var(--color-branco);
+    font-size: clamp(2.5rem, 7.4vw, 6rem);
+    max-width: 10ch;
+    text-wrap: balance;
+  }
+  .apoio { margin: 0; max-width: 38ch; font-size: clamp(1rem, 1.6vw, 1.2rem); }
+  .acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 8px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 28px;
+    border-radius: 6px;
+    background: var(--color-terra-destaque);
+    color: var(--color-gelo);
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    transition: transform .2s, background-color .2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .link {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-branco);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+
+  /* As 3 fases como capítulos do filme */
+  .capitulos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding-block: 0 24px;
+    align-items: end;
+  }
+  .cap {
+    appearance: none;
+    border: 0;
+    background: none;
+    padding: 0;
+    text-align: left;
+    font: inherit;
+    color: var(--color-floresta-profundo);
+    cursor: pointer;
+    display: grid;
+    gap: 8px;
+  }
+  .cap span {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .cap i {
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,.45);
+    overflow: hidden;
+  }
+  .cap i b { display: block; height: 100%; width: 0; background: var(--c); border-radius: 2px; }
+  .pausa {
+    justify-self: end;
+    appearance: none;
+    border: 2px solid var(--color-floresta-profundo);
+    background: none;
+    color: var(--color-floresta-profundo);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  .controle { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end; }
+  @media (max-width: 767px) {
+    .texto { justify-content: flex-end; padding-block: 250px 28px; }
+    .cap span { font-size: 11px; letter-spacing: .08em; }
+    .controle { grid-template-columns: 1fr; gap: 16px; }
+    .pausa { justify-self: start; }
+    .capitulos { padding-right: 64px; } /* espaço para o botão flutuante do WhatsApp */
+  }
+  @media (min-width: 768px) {
+    .capitulos { max-width: 560px; gap: 20px; }
+    .controle { padding-block-end: 8px; }
+  }
+
+</style>
