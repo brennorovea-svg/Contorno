@@ -24,4 +24,59 @@ import Simbolo from './Simbolo.astro';
       <p class="mt-4">Arquitetura e gestão de obra em São Paulo, desde 2021.</p>
     </div>
   </div>
+
+  <!-- Crédito da Neon Scripts (logo v3) nas cores do Contorno: sem brilho, sem rosa e sem azul -->
+  <div class="border-t border-floresta/30">
+    <div class="mx-auto flex max-w-6xl items-center justify-center px-4 pb-24 pt-5 md:px-8 md:pb-5">
+      <a class="ns-credito" href="https://neonscripts.com.br/" target="_blank" rel="noopener" aria-label="Site feito por Neon Scripts (abre em nova aba)">
+        <span class="ns-por" aria-hidden="true">Site feito por</span>
+        <span class="ns-placa" aria-hidden="true">
+          <span class="ns-neon">N<span class="ns-espelho">E</span><span class="ns-olho"><svg viewBox="0 0 100 100"><g class="ns-palpebra"><path class="ns-tubo" d="M4 50 Q50 -2 96 50 Q50 102 4 50 Z" /><circle class="ns-iris" cx="50" cy="50" r="15" /><circle class="ns-pupila" cx="50" cy="50" r="6.5" /></g></svg></span>N</span>
+          <span class="ns-scripts">SCRIPTS</span>
+        </span>
+      </a>
+    </div>
+  </div>
 </footer>
+
+<style>
+  /* Logo v3 da Neon Scripts: E ao contrário, O como olho, SCRIPTS bem menor na cor oposta */
+  .ns-credito {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-floresta-profundo);
+    text-decoration: none;
+    transition: transform 180ms cubic-bezier(.22, 1, .36, 1);
+  }
+  .ns-credito:hover { transform: translateY(-2px); }
+  .ns-credito:active { transform: scale(.97); transition-duration: 100ms; }
+  .ns-por { font-size: .75rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; }
+  .ns-placa {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 10px 5px;
+    border: 2px solid var(--color-floresta-profundo);
+    border-radius: var(--radius-md);
+    font-family: "Bungee Inline", var(--font-titulo);
+    line-height: 1;
+  }
+  .ns-neon { display: inline-flex; align-items: center; font-size: 18px; letter-spacing: .02em; }
+  .ns-scripts { margin-top: 2px; font-size: 6.8px; letter-spacing: .08em; color: var(--color-branco); }
+  .ns-espelho { display: inline-block; transform: scaleX(-1); }
+  .ns-olho { display: inline-flex; align-items: center; width: .86em; height: 1em; margin: 0 .02em; }
+  .ns-olho svg { display: block; width: 100%; height: .86em; overflow: visible; }
+  .ns-tubo { fill: none; stroke: currentColor; stroke-width: 13; stroke-linejoin: round; }
+  .ns-iris { fill: none; stroke: var(--color-branco); stroke-width: 5.5; }
+  .ns-pupila { fill: var(--color-branco); }
+  .ns-palpebra { transform-box: fill-box; transform-origin: center; }
+  /* Pisca uma vez ao passar o mouse */
+  .ns-credito:hover .ns-palpebra { animation: ns-pisca 260ms cubic-bezier(.22, 1, .36, 1); }
+  @keyframes ns-pisca { 0%, 100% { transform: none; } 42% { transform: scaleY(.06); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ns-credito { transition: none; }
+    .ns-credito:hover, .ns-credito:active { transform: none; }
+    .ns-credito:hover .ns-palpebra { animation: none; }
+  }
+</style>
