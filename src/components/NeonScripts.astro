@@ -1,0 +1,209 @@
+---
+// Rodapé padrão da Neon Scripts (logo v3, com o olho). Fonte da marca: repo Neon, marca/VERSOES.md.
+// É o crédito da agência: fica fora da paleta do Contorno de propósito, numa faixa escura no fim da página.
+---
+
+<div class="neon-faixa">
+  <a class="neon-tag" href="https://neonscripts.com.br" target="_blank" rel="noopener" aria-label="Site feito por Neon Scripts">
+    <span class="neon-tag__lead" aria-hidden="true">site feito por</span>
+    <span class="neon-tag__sign" aria-hidden="true">
+      <span class="neon-tag__plate">
+        <span class="neon-tag__screws"><i></i><i></i><i></i><i></i></span>
+        <span class="neon-tag__word"><span>N</span><span class="espelho">E</span><span class="o-olho"><svg class="olho-svg" viewBox="0 0 100 100" aria-hidden="true"><g class="palpebra"><path class="tubo" d="M4 50 Q50 -2 96 50 Q50 102 4 50 Z"/><path class="friso" d="M4 50 Q50 -2 96 50 Q50 102 4 50 Z"/><g class="olhar"><circle class="iris" cx="50" cy="50" r="15"/><circle class="pupila" cx="50" cy="50" r="6.5"/></g></g></svg></span><span>N</span></span>
+        <span class="neon-tag__word neon-tag__word--sub"><span>S</span><span>C</span><span>R</span><span>I</span><span>P</span><span>T</span><span>S</span></span>
+      </span>
+    </span>
+  </a>
+</div>
+
+<style is:global>
+.neon-faixa { display: flex; justify-content: center; padding: 30px 20px 34px; background: #05030F; overflow: hidden; }
+/* Rodapé padrão da Neon Scripts: logo v3 (com o olho). Fonte: repo Neon, marca/VERSOES.md */
+@property --ns-glow { syntax: '<color>'; inherits: true; initial-value: #FF2E9A; }
+@property --ns-glow2 { syntax: '<color>'; inherits: true; initial-value: #A24BFF; }
+@property --ns-tube { syntax: '<color>'; inherits: true; initial-value: #FFB8DC; }
+@property --ns-glowB { syntax: '<color>'; inherits: true; initial-value: #2E8CFF; }
+@property --ns-tubeB { syntax: '<color>'; inherits: true; initial-value: #B0DCFF; }
+
+.neon-tag {
+  --ns-ease: cubic-bezier(.22, 1, .36, 1);
+  --ns-glow: #FF2E9A;
+  --ns-glow2: #A24BFF;
+  --ns-tube: #FFB8DC;
+  --ns-glowB: #2E8CFF;
+  --ns-tubeB: #B0DCFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  text-decoration: none;
+  transition: --ns-glow 700ms var(--ns-ease), --ns-glow2 700ms var(--ns-ease), --ns-tube 700ms var(--ns-ease), --ns-glowB 700ms var(--ns-ease), --ns-tubeB 700ms var(--ns-ease);
+}
+
+.neon-tag.is-azul {
+  --ns-glow: #2E8CFF;
+  --ns-glow2: #40E6DC;
+  --ns-tube: #B0DCFF;
+  --ns-glowB: #FF2E9A;
+  --ns-tubeB: #FFB8DC;
+}
+
+.neon-tag:focus-visible { outline: 2px solid #fff; outline-offset: 6px; border-radius: 16px; }
+
+.neon-tag__lead {
+  font-family: "Space Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #B2A7D4;
+}
+
+.neon-tag__sign {
+  position: relative;
+  display: inline-block;
+  font-size: 30px;
+  transition: transform 180ms var(--ns-ease);
+}
+
+/* Luz da cor do tubo na parede */
+.neon-tag__sign::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -40% -30% -60%;
+  background: radial-gradient(ellipse at 50% 45%, var(--ns-glow) 0%, transparent 62%);
+  opacity: .3;
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.neon-tag__plate {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7px 18px 9px;
+  border: 4px solid var(--ns-tube);
+  border-radius: 14px;
+  background: rgba(7, 3, 26, .55);
+  box-shadow: 0 0 14px var(--ns-glow), 0 0 40px var(--ns-glow2), inset 0 0 12px var(--ns-glow), 0 16px 28px -10px rgba(0, 0, 0, .85);
+}
+
+.neon-tag__screws i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E8E4F2, #6B6680 60%, #2A2638);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .8);
+}
+.neon-tag__screws i:nth-child(1) { left: 5px; top: 5px; }
+.neon-tag__screws i:nth-child(2) { right: 5px; top: 5px; }
+.neon-tag__screws i:nth-child(3) { left: 5px; bottom: 5px; }
+.neon-tag__screws i:nth-child(4) { right: 5px; bottom: 5px; }
+
+.neon-tag__word {
+  display: inline-flex;
+  font-family: "Bungee Inline", system-ui, sans-serif;
+  line-height: 1;
+  color: var(--ns-tube);
+  text-shadow: 0 0 10px var(--ns-glow), 0 0 30px var(--ns-glow), 0 0 80px var(--ns-glow);
+}
+
+/* SCRIPTS sempre ~1/3 de NEON e na cor oposta */
+.neon-tag__word--sub {
+  font-size: .355em;
+  letter-spacing: .06em;
+  margin-top: .12em;
+  color: var(--ns-tubeB);
+  text-shadow: 0 0 6px var(--ns-glowB), 0 0 18px var(--ns-glowB), 0 0 44px var(--ns-glowB);
+}
+
+.neon-tag:hover .neon-tag__sign { transform: translateY(-2px); }
+.neon-tag:active .neon-tag__sign { transform: scale(.97); transition-duration: 100ms; }
+
+/* Liga uma vez ao aparecer; depois o JS faz piscar uma letra ou trocar rosa/azul */
+.neon-tag.is-off .neon-tag__plate { opacity: .08; }
+.neon-tag.is-on .neon-tag__plate { animation: neon-turn-on 1100ms linear; }
+.neon-tag__word span.is-blink, .neon-tag__word.is-blink { animation: neon-flick 520ms linear; }
+
+@keyframes neon-turn-on {
+  0% { opacity: .08; } 10% { opacity: 1; } 14% { opacity: .2; } 22% { opacity: 1; } 27% { opacity: .35; } 36%, 100% { opacity: 1; }
+}
+
+@keyframes neon-flick {
+  0%, 100% { opacity: 1; } 12% { opacity: .15; } 20% { opacity: .9; } 32% { opacity: .25; } 46% { opacity: 1; } 60% { opacity: .4; } 70% { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .neon-tag { flex-direction: column; gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon-tag, .neon-tag__sign { transition: none; }
+  .neon-tag.is-off .neon-tag__plate { opacity: 1; }
+  .neon-tag.is-on .neon-tag__plate, .neon-tag__word span.is-blink, .neon-tag__word.is-blink { animation: none; }
+  .neon-tag:hover .neon-tag__sign, .neon-tag:active .neon-tag__sign { transform: none; }
+}
+
+  /* Logo v3 da Neon Scripts: E ao contrário e o O vira um olho amendoado, íris na cor de SCRIPTS */
+.neon-tag .espelho { display: inline-block; transform: scaleX(-1); }
+.neon-tag .o-olho { display: inline-flex; align-items: center; width: .86em; height: 1em; margin: 0 .02em; }
+.neon-tag .olho-svg { display: block; width: 100%; height: .86em; overflow: visible; filter: drop-shadow(0 0 3px var(--ns-glow)) drop-shadow(0 0 12px var(--ns-glow)) drop-shadow(0 0 30px var(--ns-glow)); }
+.neon-tag .olho-svg .tubo { fill: none; stroke: var(--ns-tube); stroke-width: 13; stroke-linejoin: round; }
+.neon-tag .olho-svg .friso { fill: none; stroke: #1a0b33; stroke-width: 2.4; stroke-linejoin: round; opacity: .75; }
+.neon-tag .olho-svg .iris { fill: none; stroke: var(--ns-tubeB); stroke-width: 5.5; filter: drop-shadow(0 0 4px var(--ns-glowB)); }
+.neon-tag .olho-svg .pupila { fill: var(--ns-tubeB); filter: drop-shadow(0 0 6px var(--ns-glowB)); }
+.neon-tag .olho-svg .palpebra { transform-box: fill-box; transform-origin: center; transition: transform 140ms var(--ns-ease); }
+.neon-tag .o-olho.fecha .palpebra { transform: scaleY(.06); transition-duration: 110ms; }
+@media (prefers-reduced-motion: reduce) { .neon-tag .olho-svg .palpebra { transition: none; } }
+</style>
+
+<script>
+// Tag da Neon Scripts (logo v3): a placa liga uma vez quando aparece e depois, a cada
+// 2,6 a 6 s, pisca uma letra, o olho ou a placa toda, e às vezes rosa e azul trocam.
+// Só roda com a placa na tela e a aba visível.
+const neonTag = document.querySelector('.neon-tag');
+const semMovimentoNeon = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (neonTag && !semMovimentoNeon && 'IntersectionObserver' in window) {
+  const palavras = neonTag.querySelectorAll('.neon-tag__word');
+  const letras = neonTag.querySelectorAll('.neon-tag__word > span:not(.o-olho)');
+  const olho = neonTag.querySelector('.o-olho');
+  let timer = null;
+
+  const piscar = (el) => {
+    el.classList.remove('is-blink');
+    void el.offsetWidth;
+    el.classList.add('is-blink');
+  };
+
+  const tick = () => {
+    if (!document.hidden) {
+      const r = Math.random();
+      if (r < 0.3) piscar(letras[Math.floor(Math.random() * letras.length)]);
+      else if (r < 0.5) { olho.classList.add('fecha'); setTimeout(() => olho.classList.remove('fecha'), 150); }
+      else if (r < 0.7) palavras.forEach(piscar);
+      else { palavras.forEach(piscar); neonTag.classList.toggle('is-azul'); }
+    }
+    timer = setTimeout(tick, 2600 + Math.random() * 3400);
+  };
+
+  neonTag.classList.add('is-off');
+  const observerNeon = new IntersectionObserver(([entrada]) => {
+    if (entrada.isIntersecting) {
+      if (neonTag.classList.contains('is-off')) {
+        neonTag.classList.replace('is-off', 'is-on');
+        timer = setTimeout(tick, 2400);
+      } else if (!timer) {
+        timer = setTimeout(tick, 2600);
+      }
+    } else {
+      clearTimeout(timer);
+      timer = null;
+    }
+  }, { threshold: 0.5 });
+  observerNeon.observe(neonTag);
+  window.addEventListener('pagehide', () => { clearTimeout(timer); observerNeon.disconnect(); });
+}
+</script>
