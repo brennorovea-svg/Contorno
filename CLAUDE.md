@@ -15,7 +15,7 @@ Leia isto antes de qualquer mudança. O que está aqui já foi decidido com o Br
 - **Hospedagem:** GitHub Pages, publicado a cada push na `main` (`.github/workflows/pages.yml`). Nada de Vercel (o plano grátis proíbe uso comercial).
 - **Domínio:** só com o ok do Brenno e da Malu. Não mexa em DNS, `CNAME` nem `astro.config.mjs` por conta própria.
 - **Direção visual:** "A planta", congelada em `DESIGN.md`. Não proponha outra direção, outra paleta ou outra fonte.
-- **Primeira tela:** o filme da planta (`src/components/HeroFilme.astro`), aprovado e publicado. Não redesenhe; só corrija bugs.
+- **Primeira tela:** a maquete do apartamento (`src/components/HeroFilme.astro`, desenho em `figures/maquete/build.mjs`). Não redesenhe; só corrija bugs.
 - **Estrutura:** página única (`src/pages/index.astro`) com seções e menu por âncoras. Não crie páginas novas sem pedido.
 - **Seções, em ordem:** primeira tela, afirmação, como trabalhamos (3 fases), pacotes, obras, quem é a Malu, contato.
 

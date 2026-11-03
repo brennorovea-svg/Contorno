@@ -1,0 +1,50 @@
+/*
+  Cores da maquete (figura da primeira tela), só com tokens de global.css.
+  São as regras do kit Anatomy que a figura usa, com a paleta da marca:
+  maquete branca de papel-pluma sobre o Verde Contorno, traço em Floresta
+  e o único acento (o que o olho deve seguir) em Terracota.
+*/
+.maquete {
+  --m-papel: var(--color-branco);
+  --m-topo: var(--color-branco);
+  --m-sombra-0: var(--color-verde-claro);
+  --m-sombra-1: var(--color-borda);
+  --m-sombra-2: var(--color-verde-zebra);
+  --m-sombra-3: var(--color-gelo);
+  --m-hi: var(--color-floresta-profundo);
+  --m-mid: var(--color-floresta);
+  --m-lo: var(--color-verde-claro-2);
+  --m-faint: var(--color-borda);
+  --m-lit: var(--color-terra);
+  --m-lit-topo: var(--color-terra-claro);
+  --m-lit-sombra: var(--color-terra-medio);
+  --m-halo: var(--color-floresta-profundo);
+  --m-traco: 1px;
+}
+.maquete .iso-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.maquete .iso-svg path,
+.maquete .iso-svg circle { vector-effect: non-scaling-stroke; }
+.maquete .iso-fill { fill: var(--m-papel); stroke: none; }
+.maquete .iso-shade,
+.maquete .iso-top { stroke: none; }
+.maquete .iso-shade[data-shade="0"] { fill: var(--m-sombra-0); }
+.maquete .iso-shade[data-shade="1"] { fill: var(--m-sombra-1); }
+.maquete .iso-shade[data-shade="2"] { fill: var(--m-sombra-2); }
+.maquete .iso-shade[data-shade="3"] { fill: var(--m-sombra-3); }
+.maquete .iso-top { fill: var(--m-topo); }
+.maquete .iso-solid[data-lit] > .iso-fill { fill: var(--m-lit-topo); }
+.maquete .iso-solid[data-lit] > .iso-top { fill: var(--m-lit-topo); }
+.maquete .iso-solid[data-lit] > .iso-shade { fill: var(--m-lit-sombra); }
+.maquete .iso-solid[data-lit] > .iso-edge { stroke: var(--m-lit); }
+.maquete .iso-halo { fill: var(--m-halo); stroke: none; filter: blur(9px); opacity: .28; transform: translateY(3px); }
+.maquete .iso-line { fill: none; stroke: var(--m-lo); stroke-width: var(--m-traco); stroke-linecap: round; stroke-linejoin: round; }
+.maquete .iso-edge { stroke-width: calc(var(--m-traco) * 1.15); }
+.maquete .iso-line[data-tone="hi"] { stroke: var(--m-hi); }
+.maquete .iso-line[data-tone="mid"] { stroke: var(--m-mid); }
+.maquete .iso-line[data-tone="lo"] { stroke: var(--m-lo); }
+.maquete .iso-line[data-tone="faint"] { stroke: var(--m-faint); }
+.maquete .iso-line[data-tone="lit"] { stroke: var(--m-lit); }
+.maquete .iso-dots circle { fill: var(--m-hi); stroke: none; opacity: .32; }
+.maquete .iso-dots[data-tone="hi"] circle { opacity: .85; }
+.maquete .iso-dots[data-tone="mid"] circle { opacity: .5; }
+.maquete .iso-dots[data-tone="lo"] circle { opacity: .25; }

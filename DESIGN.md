@@ -42,7 +42,7 @@ Proporção: 50% gelo/branco, 30% verde, 10% terracota, 10% Floresta. Branco sob
 
 | Componente | Onde | Regra |
 | --- | --- | --- |
-| `HeroFilme` | Primeira tela | Filme em canvas de 18 s: planta, depois cotas e móveis, depois o prédio. As 3 fases são capítulos clicáveis, há botão de pausa e quadro parado com `prefers-reduced-motion`. Congelado |
+| `HeroFilme` | Primeira tela | Maquete isométrica do apartamento (SVG gerado por `figures/maquete/build.mjs` com o kit da skill Anatomy), em loop de 18 s: a planta se desenha, os móveis entram e o carimbo aprova o orçamento, e só então as paredes sobem. As 3 fases são capítulos clicáveis, há botão de pausa e a maquete pronta com `prefers-reduced-motion`. Congelado |
 | `Room` | Fases, fechamento, contato | Um ambiente em planta com aberturas laterais. Traço de 14 px, raio de 28 px nas seções internas |
 | Percurso | Fases | Linha tracejada em Floresta que atravessa as portas ao rolar (GSAP ScrollTrigger) |
 | `ec-btn ec-btn-primario` | CTAs secundários | Fundo Floresta, texto gelo |
@@ -55,7 +55,7 @@ Proporção: 50% gelo/branco, 30% verde, 10% terracota, 10% Floresta. Branco sob
 ## Movimento
 
 - Lenis para o scroll suave, com as âncoras compensando o cabeçalho fixo (96 px).
-- Animações só onde contam a história: o filme da primeira tela e o percurso das fases.
+- Animações só onde contam a história: a maquete da primeira tela e o percurso das fases.
 - `prefers-reduced-motion` desliga tudo e mostra o estado final.
 
 ## Fotos (quando chegarem)
